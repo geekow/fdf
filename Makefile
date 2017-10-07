@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jjacobi <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/06 15:47:34 by jjacobi           #+#    #+#              #
-#    Updated: 2017/10/06 15:48:27 by jjacobi          ###   ########.fr        #
+#    Updated: 2017/10/07 17:33:11 by jjacobi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,13 @@ NAME		= fdf
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror
 
-SRC_FILES   = main.c
+SRC_FILES   = main.c read_file.c
 OBJ			= $(SRC_FILES:.c=.o)
 
 H_DIRS		= -I ./includes -I ./libft/includes
 SRC_FOLDER	= ./srcs
 LIBFT_PATH	= ./libft
+MLX_PATH	= ./libmlx
 
 GREEN		= \033[32m
 RED			= \033[31m
@@ -38,18 +39,20 @@ $(NAME): $(OBJ)
 	@$(ECHO) "\r$(GREEN) The .o from $(NAME) are compiled.            \
                                                     $(DEFAULT)"
 	@($(MAKE) -C $(LIBFT_PATH))
-	@$(CC) $(FLAGS) -o $@ $^ $(LIBFT_PATH)/libft.a $(H_DIRS)
+	@($(MAKE) -C $(MLX_PATH))
+	@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_PATH)/libft.a $(MLX_PATH)/libmlx.a \
+			$(H_DIRS) -framework OpenGL -framework AppKit
 	@$(ECHO) "$(GREEN)$(NAME)$(DEFAULT) created."
 
 %.o: $(SRC_FOLDER)/%.c
 	@$(ECHO) "\r$(GREEN) Compiling $@                      \c\033[K"
-	@$(CC) $(FLAGS) -c -o $@ $< $(H_DIRS)
-	
+	@$(CC) $(CFLAGS) -c -o $@ $< $(H_DIRS)
 
 clean:
 	@rm -rf $(OBJ)
 	@$(ECHO) "All $(RED).o$(DEFAULT) are now deleted for $(NAME)."
 	@($(MAKE) -C $(LIBFT_PATH) $@)
+	@($(MAKE) -C $(MLX_PATH) $@)
 
 fclean:
 	@rm -rf $(NAME) $(OBJ)
