@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/07 18:22:09 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/12 15:45:32 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ int		main(int ac, char **av)
 	t_fdf	fdf;
 
 	fdf.mlx = mlx_init();
-	if (read_file(ac, av, &fdf) == -1)
+	if (ac != 2 || read_file(av, &fdf) == -1)
 		write_error("Error during file reading");
-	if (pthread_create(&fdf.tid, NULL, &treatment, &fdf) != 0)
-		write_error("Error during thread creation");
 	mlx_loop(fdf.mlx);
 	return (0);
 }
