@@ -6,13 +6,14 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:32:04 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/12 16:06:59 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/16 19:10:51 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <fcntl.h>
 
-int	reg_point(int x, int y, char *z, t_list *list)
+int	reg_point(int x, int y, char *z, t_list **list)
 {
 	t_list	*result;
 	t_coord	coord;
@@ -20,32 +21,30 @@ int	reg_point(int x, int y, char *z, t_list *list)
 	coord.x = x;
 	coord.y = y;
 	coord.z = ft_atoi(z);
-	result = ft_lstnew(coord, sizeof(t_coord));
-	if (list)
-	{
-		list->next = result;
-	}
-	else
-	{
-		;
-	}
+	if ((result = ft_lstnew(&coord, sizeof(t_coord))) == NULL)
+		return (-1);
+	*list = result;
 	return (0);
 }
 
-int	parse_line(char line, t_fdf *fdf, int x)
+int	parse_line(char *line, t_list **listadd, int x)
 {
 	char	**lineresult;
 	int		y;
 	t_list	*list;
 
 	y = 0;
-	list = fdf->coords;
 	lineresult = ft_split_whitespaces(line);
-	while (list && list->next)
-		list = list->next;
+	list = NULL;
 	while (lineresult[y])
-		if (reg_point(x, y, lineresult[y], list) != -1)
+	{
+		if (reg_point(x, y, lineresult[y], &list) == -1)
 			return (-1);
+		list->next = *listadd;
+		*listadd = list;
+		list = NULL;
+		y++;
+	}
 	return (0);
 }
 
@@ -59,7 +58,10 @@ int	read_file(char **av, t_fdf *fdf)
 	fd = open(av[1], O_RDONLY);
 	fdf->coords = NULL;
 	while (get_next_line(fd, &line))
-		if (-1 == parse_line(line, fdf, x) && ++x)
+	{
+		if (-1 == parse_line(line, &fdf->coords, x))
 			return (-1);
+		x++;
+	}
 	return (0);
 }

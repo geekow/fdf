@@ -6,19 +6,19 @@
 #    By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/06 15:47:34 by jjacobi           #+#    #+#              #
-#    Updated: 2017/10/07 17:33:11 by jjacobi          ###   ########.fr        #
+#    Updated: 2017/10/13 18:40:03 by jjacobi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= fdf
 
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -g
 
 SRC_FILES   = main.c read_file.c
 OBJ			= $(SRC_FILES:.c=.o)
 
-H_DIRS		= -I ./includes -I ./libft/includes
+H_DIRS		= -I ./includes -I ./libft/includes -I ./libmlx
 SRC_FOLDER	= ./srcs
 LIBFT_PATH	= ./libft
 MLX_PATH	= ./libmlx
