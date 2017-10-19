@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/17 09:26:28 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/19 20:42:13 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,20 @@ int		main(int ac, char **av)
 {
 	t_fdf	fdf;
 
+	ft_memset(&fdf, 0, sizeof(fdf));
 	fdf.mlx = mlx_init();
 	if (ac != 2 || read_file(av, &fdf) == -1)
 		write_error("Error during file reading");
+	build_connections(fdf.coords);
+	fdf.window_x = 500;
+	fdf.window_y = 500;
+	fdf.ratio = 100;
+	fdf.windows = mlx_new_window(fdf.mlx, fdf.window_x, fdf.window_y, "42 FDF");
+	fdf.image = mlx_new_image(fdf.mlx, fdf.window_x, fdf.window_y);
+	fdf.imgdata = mlx_get_data_addr(fdf.image, &fdf.img_bits_per_pixel,
+										&fdf.img_size_line, &fdf.img_endian);
+	treatment(&fdf);
+	mlx_put_image_to_window(fdf.mlx, fdf.windows, fdf.image, 0, 0);
 	mlx_loop(fdf.mlx);
 	return (0);
 }

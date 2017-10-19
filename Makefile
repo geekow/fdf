@@ -6,7 +6,7 @@
 #    By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/06 15:47:34 by jjacobi           #+#    #+#              #
-#    Updated: 2017/10/13 18:40:03 by jjacobi          ###   ########.fr        #
+#    Updated: 2017/10/19 19:32:23 by jjacobi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME		= fdf
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror -g
 
-SRC_FILES   = main.c read_file.c
+SRC_FILES   = main.c read_file.c build_connections.c treatment.c
 OBJ			= $(SRC_FILES:.c=.o)
 
 H_DIRS		= -I ./includes -I ./libft/includes -I ./libmlx
