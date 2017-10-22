@@ -35,8 +35,10 @@ typedef struct		s_fdf
 	void			*image;
 	void			*imgdata;
 	int				img_bits_per_pixel;
+	int				img_octet_per_pixel;
 	int				img_size_line;
 	int				img_endian;
+	unsigned int	zoom;
 	t_list			*coords;
 	int				ratio;
 }					t_fdf;
@@ -45,5 +47,6 @@ int					read_file(char **av, t_fdf *fdf);
 void				write_error(char *str);
 void				build_connections(t_list *coords);
 void				treatment(t_fdf *fdf);
+int					key_parser(int keycode, t_fdf *fdf);
 
 #endif

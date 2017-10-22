@@ -15,7 +15,7 @@ NAME		= fdf
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror -g
 
-SRC_FILES   = main.c read_file.c build_connections.c treatment.c
+SRC_FILES   = main.c read_file.c build_connections.c treatment.c key_parser.c
 OBJ			= $(SRC_FILES:.c=.o)
 
 H_DIRS		= -I ./includes -I ./libft/includes -I ./libmlx

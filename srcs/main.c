@@ -35,8 +35,10 @@ int		main(int ac, char **av)
 	fdf.image = mlx_new_image(fdf.mlx, fdf.window_x, fdf.window_y);
 	fdf.imgdata = mlx_get_data_addr(fdf.image, &fdf.img_bits_per_pixel,
 										&fdf.img_size_line, &fdf.img_endian);
+	fdf.img_octet_per_pixel = fdf.img_bits_per_pixel / 8;
+	fdf.zoom = 10;
 	treatment(&fdf);
-	mlx_put_image_to_window(fdf.mlx, fdf.windows, fdf.image, 0, 0);
+	mlx_key_hook(fdf.windows, key_parser, &fdf);
 	mlx_loop(fdf.mlx);
 	return (0);
 }
