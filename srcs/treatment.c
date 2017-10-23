@@ -6,11 +6,12 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 18:07:17 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/19 20:43:18 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/23 22:39:26 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <math.h>
 
 void	put_pixel(int x, int y, int color, t_fdf *fdf)
 {
@@ -24,31 +25,17 @@ void	put_pixel(int x, int y, int color, t_fdf *fdf)
 	}
 }
 
-void	apply_y(t_coord *coord, int y, t_fdf *fdf)
-{
-	coord->x = 50 + (y * fdf->zoom);
-	coord->y = 100 - (fdf->zoom * y);
-}
-
-void	apply_x(t_coord *coord, int x, t_fdf *fdf)
-{
-	coord->x += 50 + (x * fdf->zoom);
-	coord->y += 50 + (x * fdf->zoom);
-}
-
-void	apply_z(t_coord *coord, int z, t_fdf *fdf)
-{
-	coord->y -= z + fdf->zoom;
-}
-
 void	trace_point(t_fdf *fdf, t_coord *coord)
 {
 	t_coord	result;
 
-	apply_y(&result, coord->y, fdf);
-	apply_x(&result, coord->x, fdf);
-	apply_z(&result, coord->z, fdf);
-	put_pixel(result.x, result.y, 0xFFFFFF, fdf);
+	result.x = fdf->x_offset + coord->y * sin(fdf->y_factor * M_PI);
+	result.y = fdf->y_offset + coord->y * cos(fdf->y_factor * M_PI);
+	result.x += coord->x * sin(fdf->x_factor * M_PI);
+	result.y += coord->x * cos(fdf->x_factor * M_PI);
+	result.y += (-fdf->z_factor * coord->z);
+	//DO PROGRAM AXE Z (NEG AND POS CHANGES)
+	put_pixel(result.x * fdf->zoom, result.y * fdf->zoom, 0xFFFFFF, fdf);
 }
 
 void	treatment(t_fdf *fdf)

@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/19 20:42:13 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/23 22:27:29 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int		main(int ac, char **av)
 	if (ac != 2 || read_file(av, &fdf) == -1)
 		write_error("Error during file reading");
 	build_connections(fdf.coords);
-	fdf.window_x = 500;
-	fdf.window_y = 500;
+	fdf.window_x = 1000;
+	fdf.window_y = 1000;
 	fdf.ratio = 100;
 	fdf.windows = mlx_new_window(fdf.mlx, fdf.window_x, fdf.window_y, "42 FDF");
 	fdf.image = mlx_new_image(fdf.mlx, fdf.window_x, fdf.window_y);
@@ -37,6 +37,11 @@ int		main(int ac, char **av)
 										&fdf.img_size_line, &fdf.img_endian);
 	fdf.img_octet_per_pixel = fdf.img_bits_per_pixel / 8;
 	fdf.zoom = 10;
+	fdf.x_offset = 0;
+	fdf.y_offset = 0;
+	fdf.y_factor = 0;
+	fdf.x_factor = 0.5;
+	fdf.z_factor = 1;
 	treatment(&fdf);
 	mlx_key_hook(fdf.windows, key_parser, &fdf);
 	mlx_loop(fdf.mlx);

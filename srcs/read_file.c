@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:32:04 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/19 17:10:33 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/23 22:22:42 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ int	reg_point(int x, int y, char *z, t_list **list)
 	i = 0;
 	coord.x = x;
 	coord.y = y;
-	while (z[i])
-	{
-		if (i == 0 && z[i] == '-')
-			i++;
-		else if (ft_isdigit(z[i]))
-			i++;
-		else
-			return (-1);
-	}
+	// while (z[i])
+	// {
+		// if (i == 0 && z[i] == '-')
+			// i++;
+		// else if (ft_isdigit(z[i]))
+			// i++;
+		// else
+			// return (-1);
+	// }
 	coord.z = ft_atoi(z);
 	if ((result = ft_lstnew(&coord, sizeof(t_coord))) == NULL)
 		return (-1);

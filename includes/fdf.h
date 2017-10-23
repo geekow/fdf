@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:02:35 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/19 19:34:09 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/23 20:16:03 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ typedef struct		s_fdf
 	int				img_octet_per_pixel;
 	int				img_size_line;
 	int				img_endian;
+	int				x_offset;
+	int				y_offset;
+	double			y_factor;
+	double			x_factor;
+	double			z_factor;
 	unsigned int	zoom;
 	t_list			*coords;
 	int				ratio;
