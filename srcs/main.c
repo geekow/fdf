@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/23 22:27:29 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/24 12:02:35 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ int		main(int ac, char **av)
 	fdf.imgdata = mlx_get_data_addr(fdf.image, &fdf.img_bits_per_pixel,
 										&fdf.img_size_line, &fdf.img_endian);
 	fdf.img_octet_per_pixel = fdf.img_bits_per_pixel / 8;
-	fdf.zoom = 10;
-	fdf.x_offset = 0;
-	fdf.y_offset = 0;
-	fdf.y_factor = 0;
-	fdf.x_factor = 0.5;
+	fdf.zoom = 1;
+	fdf.x_offset = fdf.window_x / 12;
+	fdf.y_offset = fdf.window_y / 5;
+	fdf.y_factor = 0.65;
+	fdf.x_factor = 0.25;
 	fdf.z_factor = 1;
 	treatment(&fdf);
 	mlx_key_hook(fdf.windows, key_parser, &fdf);

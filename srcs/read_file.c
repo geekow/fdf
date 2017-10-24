@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:32:04 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/23 22:22:42 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/24 12:41:25 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	reg_point(int x, int y, char *z, t_list **list)
 			// return (-1);
 	// }
 	coord.z = ft_atoi(z);
+	coord.right = NULL;
+	coord.down = NULL;
 	if ((result = ft_lstnew(&coord, sizeof(t_coord))) == NULL)
 		return (-1);
 	*list = result;

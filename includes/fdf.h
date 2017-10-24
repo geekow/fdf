@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:02:35 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/23 20:16:03 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/24 13:05:15 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,22 @@
 # include "ft_printf.h"
 
 typedef struct		s_coord
+					t_coord;
+
+typedef struct		s_coord
 {
 	int				y;
 	int				x;
 	int				z;
-	struct t_coord	*right;
-	struct t_coord	*down;
+	t_coord			*right;
+	t_coord			*down;
 }					t_coord;
+
+typedef struct		s_xy
+{
+	int				x;
+	int				y;
+}					t_xy;
 
 typedef struct		s_fdf
 {
@@ -43,7 +52,7 @@ typedef struct		s_fdf
 	double			y_factor;
 	double			x_factor;
 	double			z_factor;
-	unsigned int	zoom;
+	double			zoom;
 	t_list			*coords;
 	int				ratio;
 }					t_fdf;
