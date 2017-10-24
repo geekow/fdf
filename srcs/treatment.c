@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 18:07:17 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/24 15:24:36 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/10/24 16:04:51 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,55 +37,38 @@ void	apply_plan(t_xy *result, t_coord *coord, t_fdf *fdf)
 	result->y *= fdf->zoom;
 }
 
-// void	trace_line(t_xy *a, t_xy *b, t_fdf *fdf)
-// {
-// 	int	dx;
-// 	int	dy;
-// 	int	error;
-//
-// 	error = b->x - a->x;
-// 	dx = error * 2;
-// 	dy = (b->y - a->y) * 2;
-// 	while (a->x <= b->x)
-// 	{
-// 		put_pixel(a->x, a->y, 0xFFFFFF, fdf);
-// 		a->x += 1;
-// 		if (error == error - dy)
-// 		{
-// 			a->y = a->y + 1;
-// 			error += dx;
-// 		}
-// 	}
-// }
-
-void trace_line(t_xy *a, t_xy *b, t_fdf *fdf)
+void	trace_line(t_xy *acpy, t_xy *b, t_fdf *fdf)
 {
-	if (a->x == b->x)
+	t_xy	a;
+
+	a.x = acpy->x;
+	a.y = acpy->y;
+	if (a.x == b->x)
 	{
-		while (a->y++ < b->y)
-			put_pixel(a->x, a->y - 1, 0xFFFFFF, fdf);
-		while (b->y++ < a->y)
-			put_pixel(b->x, b->y - 1, 0xFFFFFF, fdf);
+		while (a.y++ < b->y)
+			put_pixel(a.x, a.y - 1, 0x0000FF, fdf);
+		while (b->y++ < a.y)
+			put_pixel(b->x, b->y - 1, 0x0000FF, fdf);
 	}
-	else if (a->y == b->y)
+	else if (a.y == b->y)
 	{
-		while (a->x++ < b->x)
-			put_pixel(a->x - 1, a->y, 0xFFFFFF, fdf);
-		while (b->x++ < a->x)
-			put_pixel(b->x - 1, b->y, 0xFFFFFF, fdf);
+		while (a.x++ < b->x)
+			put_pixel(a.x - 1, a.y, 0x0000FF, fdf);
+		while (b->x++ < a.x)
+			put_pixel(b->x - 1, b->y, 0x0000FF, fdf);
 	}
-	else if (a->x < b->x)
-		while (a->x < b->x)
+	else if (a.x < b->x)
+		while (a.x < b->x)
 		{
-			put_pixel(a->x, a->y, 0xFFFFFF, fdf);
-			a->y += (b->y - a->y) / (b->x - a->x);
-			a->x += 1;
+			put_pixel(a.x, a.y, 0x0000FF, fdf);
+			a.y += (b->y - a.y) / (b->x - a.x);
+			a.x += 1;
 		}
 	else
-		while (b->x < a->x)
+		while (b->x < a.x)
 		{
-			put_pixel(b->x, b->y, 0xFFFFFF, fdf);
-			b->y += (a->y - b->y) / (a->x - b->x);
+			put_pixel(b->x, b->y, 0x0000FF, fdf);
+			b->y += (a.y - b->y) / (a.x - b->x);
 			b->x += 1;
 		}
 }
@@ -100,13 +83,11 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 	if (coord->right)
 	{
 		apply_plan(&tmp, coord->right, fdf);
-		// put_pixel(tmp.x, tmp.y, 0x7F00FF, fdf);
 		trace_line(&result, &tmp, fdf);
 	}
 	if (coord->down)
 	{
 		apply_plan(&tmp, coord->down, fdf);
-		// put_pixel(tmp.x, tmp.y, 0x7F00FF, fdf);
 		trace_line(&result, &tmp, fdf);
 	}
 }
@@ -114,15 +95,6 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 void	treatment(t_fdf *fdf)
 {
 	t_list	*list;
-
-	// t_xy	a;
-	// t_xy	b;
-	//
-	// a.x = 0;
-	// a.y = 100;
-	// b.x = 100;
-	// b.y = 0;
-	// trace_line(&a, &b, fdf);
 
 	list = fdf->coords;
 	while (list)
