@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 18:07:17 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/24 16:04:51 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/12/13 23:57:10 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,25 @@ void	put_pixel(int x, int y, int color, t_fdf *fdf)
 
 void	apply_plan(t_xy *result, t_coord *coord, t_fdf *fdf)
 {
-	result->x = fdf->x_offset + coord->y * sin(fdf->y_factor * M_PI);
-	result->y = fdf->y_offset + coord->y * cos(fdf->y_factor * M_PI);
+	result->x = coord->y * sin(fdf->y_factor * M_PI);
+	result->y = coord->y * cos(fdf->y_factor * M_PI);
 	result->x += coord->x * sin(fdf->x_factor * M_PI);
 	result->y += coord->x * cos(fdf->x_factor * M_PI);
 	result->x += coord->z * sin(fdf->z_factor * M_PI);
 	result->y += coord->z * cos(fdf->z_factor * M_PI);
+	result->x += fdf->x_offset;
+	result->y += fdf->y_offset;
 	result->x *= fdf->zoom;
 	result->y *= fdf->zoom;
 }
 
+//X = x0*cos(a) - y0*sin(a)
+//Y = x0*sin(a) + y0*cos(a)
+
 void	trace_line(t_xy *acpy, t_xy *b, t_fdf *fdf)
 {
 	t_xy	a;
+	t_xy	tmp;
 
 	a.x = acpy->x;
 	a.y = acpy->y;
@@ -61,15 +67,33 @@ void	trace_line(t_xy *acpy, t_xy *b, t_fdf *fdf)
 		while (a.x < b->x)
 		{
 			put_pixel(a.x, a.y, 0x0000FF, fdf);
-			a.y += (b->y - a.y) / (b->x - a.x);
+			tmp.y = a.y + (b->y - a.y) / (b->x - a.x);
 			a.x += 1;
+			while (a.y != tmp.y)
+			{
+				put_pixel(a.x, a.y, 0x0000FF, fdf);
+				if (a.y < tmp.y)
+					a.y++;
+				else
+					a.y--;
+			}
+			a.y = tmp.y;
 		}
 	else
 		while (b->x < a.x)
 		{
 			put_pixel(b->x, b->y, 0x0000FF, fdf);
-			b->y += (a.y - b->y) / (a.x - b->x);
+			tmp.y = b->y + (a.y - b->y) / (a.x - b->x);
 			b->x += 1;
+			while (b->y != tmp.y)
+			{
+				put_pixel(b->x, b->y, 0x0000FF, fdf);
+				if (b->y < tmp.y)
+					b->y++;
+				else
+					b->y--;
+			}
+			b->y = tmp.y;
 		}
 }
 

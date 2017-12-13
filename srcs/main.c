@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/24 12:02:35 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/12/13 21:34:30 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int		main(int ac, char **av)
 	build_connections(fdf.coords);
 	fdf.window_x = 1000;
 	fdf.window_y = 1000;
-	fdf.ratio = 100;
 	fdf.windows = mlx_new_window(fdf.mlx, fdf.window_x, fdf.window_y, "42 FDF");
 	fdf.image = mlx_new_image(fdf.mlx, fdf.window_x, fdf.window_y);
 	fdf.imgdata = mlx_get_data_addr(fdf.image, &fdf.img_bits_per_pixel,

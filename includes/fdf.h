@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:02:35 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/24 13:05:15 by jjacobi          ###   ########.fr       */
+/*   Updated: 2017/12/13 21:35:05 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct		s_fdf
 	double			z_factor;
 	double			zoom;
 	t_list			*coords;
-	int				ratio;
 }					t_fdf;
 
 int					read_file(char **av, t_fdf *fdf);
