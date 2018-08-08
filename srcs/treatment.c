@@ -25,54 +25,59 @@ void	put_pixel(int x, int y, int color, t_fdf *fdf)
 	}
 }
 
-void trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
+int		advance_segment(t_xy *start_point, t_xy *inc, t_xy *delta, int cumul)
 {
-	t_xy delta;
-	t_xy inc;
-	t_xy point;
-	int i;
-	int cumul;
-
-	point.x = one->x;
-	point.y = one->y;
-	delta.x = two->x - one->x;
-	delta.y = two->y - one->y;
-	inc.x = ( delta.x > 0 ) ? 1 : -1 ;
-	inc.y = ( delta.y > 0 ) ? 1 : -1 ;
-	delta.x = abs(delta.x) ;
-	delta.y = abs(delta.y) ;
-	put_pixel(point.x, point.y, color, fdf) ;
-	if ( delta.x > delta.y )
+	if (delta->x > delta->y)
 	{
-		cumul = delta.x / 2 ;
-		for ( i = 1 ; i <= delta.x ; i++ )
-		{
-			point.x += inc.x ;
-			cumul += delta.y ;
-			if ( cumul >= delta.x )
-			{
-				cumul -= delta.x ;
-				point.y += inc.y;
-			}
-		put_pixel(point.x, point.y, color, fdf);
-		}
+		start_point->x += inc->x;
+		cumul += delta->y;
+		if (cumul >= delta->x)
+			start_point->y += inc->y;
+		return cumul - ((cumul >= delta->x) ? delta->x : 0);
 	}
 	else
 	{
-	  cumul = delta.y / 2 ;
-	  for ( i = 1 ; i <= delta.y ; i++ )
-	  {
-		  point.y += inc.y;
-		  cumul += delta.x ;
-		  if (cumul >= delta.y)
-		  {
-			  cumul -= delta.y;
-			  point.x += inc.x;
-		  }
-		put_pixel(point.x, point.y, color, fdf);
+		start_point->y += inc->y;
+		cumul += delta->x;
+		if (cumul >= delta->y)
+			start_point->x += inc->x;
+		return cumul - ((cumul >= delta->y) ? delta->y : 0);
 	}
-	}
-  }
+}
+
+/*
+** The trace_line function is an implementation of Bresenham algorithm.
+*/
+
+void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
+{
+	t_xy	start_point;
+	t_xy	delta;
+	t_xy	inc;
+	int		i;
+	int		cumul;
+
+	ft_memcpy(&start_point, one, sizeof(t_xy));
+	delta.x = abs(two->x - one->x);
+	delta.y = abs(two->y - one->y);
+	inc.x = (two->x - one->x > 0) ? 1 : -1;
+	inc.y = (two->y - one->y > 0) ? 1 : -1;
+	put_pixel(start_point.x, start_point.y, color, fdf);
+	i = 0;
+	cumul = (delta.x > delta.y) ? delta.x / 2 : delta.y / 2;
+	if (delta.x > delta.y)
+		while (i++ < delta.x)
+		{
+			cumul = advance_segment(&start_point, &inc, &delta, cumul);
+			put_pixel(start_point.x, start_point.y, color, fdf);
+		}
+	else
+		while (i++ < delta.y)
+		{
+			cumul = advance_segment(&start_point, &inc, &delta, cumul);
+			put_pixel(start_point.x, start_point.y, color, fdf);
+		}
+}
 
 void	apply_plan(t_xy *result, t_coord *coord, t_fdf *fdf)
 {
