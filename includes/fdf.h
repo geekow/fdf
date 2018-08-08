@@ -49,6 +49,7 @@ typedef struct		s_fdf
 	int				img_endian;
 	int				x_offset;
 	int				y_offset;
+	char			show_axes;
 	double			y_factor;
 	double			x_factor;
 	double			z_factor;

@@ -33,7 +33,7 @@ int		advance_segment(t_xy *start_point, t_xy *inc, t_xy *delta, int cumul)
 		cumul += delta->y;
 		if (cumul >= delta->x)
 			start_point->y += inc->y;
-		return cumul - ((cumul >= delta->x) ? delta->x : 0);
+		return (cumul - ((cumul >= delta->x) ? delta->x : 0));
 	}
 	else
 	{
@@ -41,7 +41,7 @@ int		advance_segment(t_xy *start_point, t_xy *inc, t_xy *delta, int cumul)
 		cumul += delta->x;
 		if (cumul >= delta->y)
 			start_point->x += inc->x;
-		return cumul - ((cumul >= delta->y) ? delta->y : 0);
+		return (cumul - ((cumul >= delta->y) ? delta->y : 0));
 	}
 }
 
@@ -65,33 +65,23 @@ void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
 	put_pixel(start_point.x, start_point.y, color, fdf);
 	i = 0;
 	cumul = (delta.x > delta.y) ? delta.x / 2 : delta.y / 2;
-	if (delta.x > delta.y)
-		while (i++ < delta.x)
-		{
-			cumul = advance_segment(&start_point, &inc, &delta, cumul);
-			put_pixel(start_point.x, start_point.y, color, fdf);
-		}
-	else
-		while (i++ < delta.y)
-		{
-			cumul = advance_segment(&start_point, &inc, &delta, cumul);
-			put_pixel(start_point.x, start_point.y, color, fdf);
-		}
+	while (i++ < ((delta.x > delta.y) ? delta.x : delta.y))
+	{
+		cumul = advance_segment(&start_point, &inc, &delta, cumul);
+		put_pixel(start_point.x, start_point.y, color, fdf);
+	}
 }
 
 void	apply_plan(t_xy *result, t_coord *coord, t_fdf *fdf)
 {
-	// This function is probably not working as excepted
-	result->x = coord->y * sin(fdf->y_factor * M_PI);
-	result->y = coord->y * cos(fdf->y_factor * M_PI);
-	result->x += coord->x * sin(fdf->x_factor * M_PI);
-	result->y += coord->x * cos(fdf->x_factor * M_PI);
-	result->x += coord->z * sin(fdf->z_factor * M_PI);
-	result->y += coord->z * cos(fdf->z_factor * M_PI);
-	result->x += fdf->x_offset;
-	result->y += fdf->y_offset;
-	result->x *= fdf->zoom;
-	result->y *= fdf->zoom;
+	result->x = (coord->y * fdf->zoom) * sin(fdf->y_factor * M_PI);
+	result->y = (coord->y * fdf->zoom) * cos(fdf->y_factor * M_PI);
+	result->x += (coord->x * fdf->zoom) * sin(fdf->x_factor * M_PI);
+	result->y += (coord->x * fdf->zoom) * cos(fdf->x_factor * M_PI);
+	result->x += (coord->z * fdf->zoom) * sin(fdf->z_factor * M_PI);
+	result->y += (coord->z * fdf->zoom) * cos(fdf->z_factor * M_PI);
+	result->x += (fdf->x_offset * fdf->zoom);
+	result->y += (fdf->y_offset * fdf->zoom);
 }
 
 void	trace_point(t_fdf *fdf, t_coord *coord)
@@ -113,36 +103,44 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 	}
 }
 
+void	print_axes(t_fdf *fdf)
+{
+	t_coord	center;
+	t_coord	axe;
+	t_xy	center_pos;
+	t_xy	axe_pos;
+
+	center.x = 0;
+	center.y = 0;
+	center.z = 0;
+	apply_plan(&center_pos, &center, fdf);
+	axe.x = 0;
+	axe.y = 0;
+	axe.z = 1;
+	apply_plan(&axe_pos, &axe, fdf);
+	trace_line(&center_pos, &axe_pos, fdf, 0xFF0101);
+	axe.x = 1;
+	axe.z = 0;
+	apply_plan(&axe_pos, &axe, fdf);
+	trace_line(&center_pos, &axe_pos, fdf, 0x01FF01);
+	axe.x = 0;
+	axe.y = 1;
+	apply_plan(&axe_pos, &axe, fdf);
+	trace_line(&center_pos, &axe_pos, fdf, 0xFF01FF);
+}
+
 void	treatment(t_fdf *fdf)
 {
 	t_list	*list;
-	t_xy	center;
-	t_xy	z;
-	t_xy	y;
-	t_xy	x;
 
-	center.x = 100;
-	center.y = 100;
-	
-	z.x = 100;
-	z.y = 50;
-
-	y.x = 150;
-	y.y = 100;
-
-	x.x = 60;
-	x.y = 125;
-	
-	// Lets print the plan axes
-	trace_line(&center, &z, fdf, 0xFF0101);
-	trace_line(&center, &y, fdf, 0x01FF01);
-	trace_line(&center, &x, fdf, 0x0101FF);
 	list = fdf->coords;
 	while (list)
 	{
 		trace_point(fdf, list->content);
 		list = list->next;
 	}
+	if (fdf->show_axes)
+		print_axes(fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->windows, fdf->image, 0, 0);
 	ft_memset(fdf->imgdata, 0, fdf->img_size_line * (fdf->window_y + 1));
 }

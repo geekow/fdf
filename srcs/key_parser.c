@@ -16,21 +16,21 @@
 void	modify_zoom(t_fdf *fdf, char increase)
 {
 	if (increase && fdf->zoom < UINT_MAX)
-		fdf->zoom += 0.1;
+		fdf->zoom += 1;
 	else if (!increase && fdf->zoom > 0)
-		fdf->zoom -= 0.1;
+		fdf->zoom -= 1;
 }
 
 void	modify_offset(int keycode, t_fdf *fdf)
 {
 	if (keycode == 123)
-		fdf->x_offset += fdf->window_x / 16 / fdf->zoom;
+		fdf->x_offset += (fdf->window_x / 16) / fdf->zoom;
 	else if (keycode == 124)
-		fdf->x_offset -= fdf->window_x / 16 / fdf->zoom;
+		fdf->x_offset -= (fdf->window_x / 16) / fdf->zoom;
 	else if (keycode == 126)
-		fdf->y_offset += fdf->window_y / 16 / fdf->zoom;
+		fdf->y_offset += (fdf->window_y / 16) / fdf->zoom;
 	else if (keycode == 125)
-		fdf->y_offset -= fdf->window_y / 16 / fdf->zoom;
+		fdf->y_offset -= (fdf->window_y / 16) / fdf->zoom;
 }
 
 void	modify_axe(int keycode, t_fdf *fdf)
@@ -65,6 +65,8 @@ int		key_parser(int keycode, t_fdf *fdf)
 		modify_offset(keycode, fdf);
 	else if (keycode >= 83 && keycode <= 92)
 		modify_axe(keycode, fdf);
+	else if (keycode == 0)
+		fdf->show_axes = (fdf->show_axes) ? 0 : 1;
 	else
 		ft_printf("Unrecognized key pressed. Keycode: %i\n", keycode);
 	treatment(fdf);
