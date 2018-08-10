@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 18:07:17 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/12/13 23:57:10 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:46:07 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
 	}
 }
 
-void	apply_plan(t_xy *result, t_coord *coord, t_fdf *fdf)
+void	apply_plan(t_xy *result, t_dcoord *coord, t_fdf *fdf)
 {
 	result->x = (coord->y * fdf->zoom) * sin(fdf->y_factor * M_PI);
 	result->y = (coord->y * fdf->zoom) * cos(fdf->y_factor * M_PI);
@@ -84,29 +84,54 @@ void	apply_plan(t_xy *result, t_coord *coord, t_fdf *fdf)
 	result->y += (fdf->y_offset * fdf->zoom);
 }
 
+//    T x[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+
+t_dcoord	*apply_cam(t_coord *coord)
+{
+	t_dcoord	*result;
+	t_dcoord	cam[3];
+
+	cam[0].x = 1;
+	cam[0].y = 0;
+	cam[0].z = 0;
+
+	cam[1].x = 0;
+	cam[1].y = 1;
+	cam[1].z = 0;
+
+	cam[2].x = 0;
+	cam[2].y = 0;
+	cam[2].z = 1;
+	result = ft_memalloc(sizeof(t_coord));
+	result->x = coord->x * cam[0].x + coord->y * cam[1].x + coord->z * cam[2].x + 0;
+	result->y = coord->x * cam[0].y + coord->y * cam[1].y + coord->z * cam[2].y + 0;
+	result->z = coord->x * cam[0].z + coord->y * cam[1].z + coord->z * cam[2].z + 0;
+	return (result);
+}
+
 void	trace_point(t_fdf *fdf, t_coord *coord)
 {
 	t_xy	result;
 	t_xy	tmp;
 
-	apply_plan(&result, coord, fdf);
-	put_pixel(result.x, result.y, 0xAFFFFF, fdf);
+	apply_plan(&result, apply_cam(coord), fdf);
+	put_pixel(result.x, result.y, 0x00AFFFFF, fdf);
 	if (coord->right)
 	{
-		apply_plan(&tmp, coord->right, fdf);
-		trace_line(&result, &tmp, fdf, 0x0000FF);
+		apply_plan(&tmp, apply_cam(coord->right), fdf);
+		trace_line(&result, &tmp, fdf, 0x000000FF);
 	}
 	if (coord->down)
 	{
-		apply_plan(&tmp, coord->down, fdf);
-		trace_line(&result, &tmp, fdf, 0x0000FF);
+		apply_plan(&tmp, apply_cam(coord->down), fdf);
+		trace_line(&result, &tmp, fdf, 0x000000FF);
 	}
 }
 
 void	print_axes(t_fdf *fdf)
 {
-	t_coord	center;
-	t_coord	axe;
+	t_dcoord	center;
+	t_dcoord	axe;
 	t_xy	center_pos;
 	t_xy	axe_pos;
 
@@ -118,15 +143,15 @@ void	print_axes(t_fdf *fdf)
 	axe.y = 0;
 	axe.z = 1;
 	apply_plan(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, 0xFF0101);
+	trace_line(&center_pos, &axe_pos, fdf, 0x00FF0101);
 	axe.x = 1;
 	axe.z = 0;
 	apply_plan(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, 0x01FF01);
+	trace_line(&center_pos, &axe_pos, fdf, 0x0001FF01);
 	axe.x = 0;
 	axe.y = 1;
 	apply_plan(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, 0xFF01FF);
+	trace_line(&center_pos, &axe_pos, fdf, 0x00FF01FF);
 }
 
 void	treatment(t_fdf *fdf)

@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/12/13 21:34:30 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:26:38 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ int		main(int ac, char **av)
 	fdf.x_factor = 0.25;
 	fdf.z_factor = 1;
 	treatment(&fdf);
-	mlx_key_hook(fdf.windows, key_parser, &fdf);
+	mlx_hook(fdf.windows, 2, 1L<<0, key_parser, &fdf);
+	mlx_do_key_autorepeaton(&fdf.mlx);
 	mlx_loop(fdf.mlx);
 	return (0);
 }

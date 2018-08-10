@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:02:35 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/12/13 21:35:05 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/08/10 16:40:09 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ typedef struct		s_coord
 	t_coord			*right;
 	t_coord			*down;
 }					t_coord;
+
+typedef struct		s_dcoord
+{
+	double			y;
+	double			x;
+	double			z;
+}					t_dcoord;
 
 typedef struct		s_xy
 {
