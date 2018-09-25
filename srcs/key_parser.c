@@ -36,23 +36,23 @@ void	modify_offset(int keycode, t_fdf *fdf)
 
 void	modify_axe(int keycode, t_fdf *fdf)
 {
-	if (keycode == 92)
+	if (keycode == NINE)
 		fdf->y_factor += 0.05;
-	else if (keycode == 85)
+	else if (keycode == THREE)
 		fdf->y_factor -= 0.05;
-	else if (keycode == 91)
+	else if (keycode == EIGHT)
 		fdf->x_factor += 0.05;
-	else if (keycode == 84)
+	else if (keycode == TWO)
 		fdf->x_factor -= 0.05;
-	else if (keycode == 89)
+	else if (keycode == SEVEN)
 		fdf->z_factor += 0.05;
-	else if (keycode == 83)
+	else if (keycode == ONE)
 		fdf->z_factor -= 0.05;
-	else if (keycode == 86)
+	else if (keycode == FOUR)
 		fdf->z_factor = 1;
-	else if (keycode == 87)
+	else if (keycode == FIVE)
 		fdf->x_factor = 0.25;
-	else if (keycode == 88)
+	else if (keycode == SIX)
 		fdf->y_factor = 0.65;
 }
 
@@ -64,9 +64,9 @@ int		key_parser(int keycode, t_fdf *fdf)
 		modify_zoom(fdf, keycode == PLUS ? 1 : 0);
 	else if (ARROW_COND(keycode))
 		modify_offset(keycode, fdf);
-	else if (keycode >= 83 && keycode <= 92)
+	else if (NBR_COND(keycode))
 		modify_axe(keycode, fdf);
-	else if (keycode == 0)
+	else if (keycode == A)
 		fdf->show_axes = (fdf->show_axes) ? 0 : 1;
 	else
 		ft_printf("Unrecognized key pressed. Keycode: %i\n", keycode);
