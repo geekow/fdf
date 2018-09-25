@@ -11,6 +11,7 @@
 #  define RIGHT		126
 #  define ARROW_COND(x)	(x >= 123 && x <= 126)
 #  define A		0
+#  define ZERO		82
 #  define ONE		83
 #  define TWO		84
 #  define THREE		85
@@ -20,7 +21,7 @@
 #  define SEVEN		89
 #  define EIGHT		91
 #  define NINE		92
-#  define NBR_COND(x)	(x >= 83 && x <= 92)
+#  define NBR_COND(x)	(x >= 82 && x <= 92 && x != 90)
 # else
 #  define ESCAPE	65307
 #  define PLUS		65451
@@ -31,6 +32,7 @@
 #  define BOTTOM	65364
 #  define ARROW_COND(x)	(x >= 65361 && x <= 65364)
 #  define A		97
+#  define ZERO		65438
 #  define ONE		65436
 #  define TWO		65433
 #  define THREE		65435
@@ -40,7 +42,7 @@
 #  define SEVEN		65429
 #  define EIGHT		65431
 #  define NINE		65434
-#  define NBR_COND(x)	(x >= 65429 && x<= 65437)
+#  define NBR_COND(x)	(x >= 65429 && x<= 65438)
 # endif
 
 #endif
