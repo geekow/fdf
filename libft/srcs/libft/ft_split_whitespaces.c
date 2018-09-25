@@ -44,7 +44,7 @@ static char		*str_to_put(char const *s, size_t *i)
 	k = j;
 	while (s[*i] != '\0' && !(s[*i] == 32 || (9 <= s[*i] && s[*i] <= 13)))
 		*i += 1;
-	if ((result = (char*)malloc(sizeof(*result) * (*i - j))) == NULL)
+	if ((result = (char*)malloc(sizeof(*result) * (*i - j + 1))) == NULL)
 		return (NULL);
 	while (j < *i)
 	{
