@@ -12,6 +12,7 @@
 
 #include "fdf.h"
 #include <limits.h>
+#include "keycode.h"
 
 void	modify_zoom(t_fdf *fdf, char increase)
 {
@@ -57,10 +58,10 @@ void	modify_axe(int keycode, t_fdf *fdf)
 
 int		key_parser(int keycode, t_fdf *fdf)
 {
-	if (keycode == 53)
+	if (keycode == ESCAPE)
 		exit(0);
-	else if (keycode == 69 || keycode == 78)
-		modify_zoom(fdf, keycode == 69 ? 1 : 0);
+	else if (keycode == PLUS || keycode == MINUS)
+		modify_zoom(fdf, keycode == PLUS ? 1 : 0);
 	else if (keycode >= 123 && keycode <= 126)
 		modify_offset(keycode, fdf);
 	else if (keycode >= 83 && keycode <= 92)
