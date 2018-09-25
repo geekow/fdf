@@ -12,26 +12,28 @@
 
 NAME		= fdf
 
-CC			= gcc
+CC			= clang
 CFLAGS		= -Wall -Wextra -Werror -g
 
 SRC_FILES   = main.c read_file.c build_connections.c treatment.c key_parser.c
 OBJ			= $(SRC_FILES:.c=.o)
 
-H_DIRS		= -I ./includes -I ./libft/includes -I ./libmlx
+H_DIRS		= -I ./includes -I ./libft/includes
 SRC_FOLDER	= ./srcs
 LIBFT_PATH	= ./libft
-MLX_PATH	= ./libmlx
+ifeq ($(shell uname),Darwin)
+	MLX_PATH	= ./libmlx_macos
+	CC_FLAGS	= -I ./libmlx_macos -framework OpenGL -framework AppKit
+	ECHO	= echo
+else
+	MLX_PATH	= ./libmlx_linux
+	CC_FLAGS	= -I ./libmlx_linux -I /usr/X11/include -g -L /usr/X11/lib -lX11 -lmlx -lXext -lm
+	ECHO	= echo -e
+endif
 
 GREEN		= \033[32m
 RED			= \033[31m
 DEFAULT		= \033[37m
-
-ifeq ($(shell uname),Darwin)
-	ECHO	= echo
-else
-	ECHO	= echo -e
-endif
 
 all: $(NAME)
 
@@ -41,7 +43,7 @@ $(NAME): $(OBJ)
 	@($(MAKE) -C $(LIBFT_PATH))
 	@($(MAKE) -C $(MLX_PATH))
 	@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT_PATH)/libft.a $(MLX_PATH)/libmlx.a \
-			$(H_DIRS) -framework OpenGL -framework AppKit
+			$(H_DIRS) $(CC_FLAGS)
 	@$(ECHO) "$(GREEN)$(NAME)$(DEFAULT) created."
 
 %.o: $(SRC_FOLDER)/%.c
