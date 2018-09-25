@@ -24,13 +24,13 @@ void	modify_zoom(t_fdf *fdf, char increase)
 
 void	modify_offset(int keycode, t_fdf *fdf)
 {
-	if (keycode == 123)
+	if (keycode == TOP)
 		fdf->x_offset += (fdf->window_x / 16) / fdf->zoom;
-	else if (keycode == 124)
+	else if (keycode == BOTTOM)
 		fdf->x_offset -= (fdf->window_x / 16) / fdf->zoom;
-	else if (keycode == 126)
+	else if (keycode == RIGHT)
 		fdf->y_offset += (fdf->window_y / 16) / fdf->zoom;
-	else if (keycode == 125)
+	else if (keycode == LEFT)
 		fdf->y_offset -= (fdf->window_y / 16) / fdf->zoom;
 }
 
@@ -62,7 +62,7 @@ int		key_parser(int keycode, t_fdf *fdf)
 		exit(0);
 	else if (keycode == PLUS || keycode == MINUS)
 		modify_zoom(fdf, keycode == PLUS ? 1 : 0);
-	else if (keycode >= 123 && keycode <= 126)
+	else if (ARROW_COND(keycode))
 		modify_offset(keycode, fdf);
 	else if (keycode >= 83 && keycode <= 92)
 		modify_axe(keycode, fdf);
