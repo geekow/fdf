@@ -61,6 +61,7 @@ fclean:
 	@$(ECHO) "All $(RED).o$(DEFAULT) are now deleted for $(NAME)."
 	@$(ECHO) "$(RED)$(NAME)$(DEFAULT) is now deleted."
 	@($(MAKE) -C $(LIBFT_PATH) $@)
+	@($(MAKE) -C $(MLX_PATH) clean)
 
 re: fclean all
 
