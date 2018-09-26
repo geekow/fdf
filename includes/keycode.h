@@ -26,10 +26,10 @@
 #  define ESCAPE	65307
 #  define PLUS		65451
 #  define MINUS		65453
-#  define LEFT		65361
-#  define TOP		65362
-#  define RIGHT		65363
-#  define BOTTOM	65364
+#  define TOP		65361
+#  define RIGHT		65362
+#  define BOTTOM	65363
+#  define LEFT      65364
 #  define ARROW_COND(x)	(x >= 65361 && x <= 65364)
 #  define A		97
 #  define ZERO		65438
@@ -43,6 +43,12 @@
 #  define EIGHT		65431
 #  define NINE		65434
 #  define NBR_COND(x)	(x >= 65429 && x<= 65438)
+#  define E         101
+#  define R         114
+#  define T         116
+#  define Y         121
+#  define U         117
+#  define I         105
 # endif
 
 #endif

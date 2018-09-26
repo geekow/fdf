@@ -4,3 +4,6 @@ fdf
 ./libmlx_linux/libmlx_x86_64.a
 ./libmlx_linux/libmlx.a
 vgcore.*
+.idea/
+CMakeLists.txt
+cmake-build-debug/

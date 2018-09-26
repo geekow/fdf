@@ -17,6 +17,12 @@
 # include "libft.h"
 # include "ft_printf.h"
 
+# ifdef __APPLE__
+#  define KEYREPEAT lx_do_key_autorepeaton(&fdf.mlx);
+# else
+#  define KEYREPEAT ;
+# endif
+
 typedef struct		s_coord
 					t_coord;
 
@@ -62,6 +68,7 @@ typedef struct		s_fdf
 	double			z_factor;
 	double			zoom;
 	t_list			*coords;
+	t_dcoord        cam[3];
 }					t_fdf;
 
 int					read_file(char **av, t_fdf *fdf);

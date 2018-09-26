@@ -37,17 +37,17 @@ void	modify_offset(int keycode, t_fdf *fdf)
 void	modify_axe(int keycode, t_fdf *fdf)
 {
 	if (keycode == NINE)
-		fdf->y_factor += 0.05;
+		fdf->y_factor += 0.01;
 	else if (keycode == THREE)
-		fdf->y_factor -= 0.05;
+		fdf->y_factor -= 0.01;
 	else if (keycode == EIGHT)
-		fdf->x_factor += 0.05;
+		fdf->x_factor += 0.01;
 	else if (keycode == TWO)
-		fdf->x_factor -= 0.05;
+		fdf->x_factor -= 0.01;
 	else if (keycode == SEVEN)
-		fdf->z_factor += 0.05;
+		fdf->z_factor += 0.01;
 	else if (keycode == ONE)
-		fdf->z_factor -= 0.05;
+		fdf->z_factor -= 0.01;
 	else if (keycode == FOUR)
 		fdf->z_factor = 1;
 	else if (keycode == FIVE)
@@ -68,6 +68,12 @@ int		key_parser(int keycode, t_fdf *fdf)
 		modify_axe(keycode, fdf);
 	else if (keycode == A)
 		fdf->show_axes = (fdf->show_axes) ? 0 : 1;
+	else if (keycode == E || keycode == R)
+		fdf->cam[2].z += (keycode == E ? 0.01 : -0.01);
+	else if (keycode == T || keycode == Y)
+		fdf->cam[1].y += (keycode == T ? 0.01 : -0.01);
+	else if (keycode == U || keycode == I)
+		fdf->cam[0].x += (keycode == U ? 0.01 : -0.01);
 	else
 		ft_printf("Unrecognized key pressed. Keycode: %i\n", keycode);
 	treatment(fdf);

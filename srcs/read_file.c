@@ -17,9 +17,7 @@ int	reg_point(int x, int y, char *z, t_list **list)
 {
 	t_list	*result;
 	t_coord	coord;
-	int		i;
 
-	i = 0;
 	coord.x = x;
 	coord.y = y;
 	// while (z[i])

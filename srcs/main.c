@@ -19,6 +19,25 @@ void	write_error(char *str)
 	exit(-1);
 }
 
+void	fdf_init(t_fdf *fdf)
+{
+	fdf->zoom = 1;
+	fdf->x_offset = fdf->window_x / 12;
+	fdf->y_offset = fdf->window_y / 5;
+	fdf->y_factor = 0.65;
+	fdf->x_factor = 0.25;
+	fdf->z_factor = 1;
+	fdf->cam[0].x = 1;
+	fdf->cam[0].y = 0;
+	fdf->cam[0].z = 0;
+	fdf->cam[1].x = 0;
+	fdf->cam[1].y = 1;
+	fdf->cam[1].z = 0;
+	fdf->cam[2].x = 0;
+	fdf->cam[2].y = 0;
+	fdf->cam[2].z = 1;
+}
+
 int		main(int ac, char **av)
 {
 	t_fdf	fdf;
@@ -35,15 +54,10 @@ int		main(int ac, char **av)
 	fdf.imgdata = mlx_get_data_addr(fdf.image, &fdf.img_bits_per_pixel,
 										&fdf.img_size_line, &fdf.img_endian);
 	fdf.img_octet_per_pixel = fdf.img_bits_per_pixel / 8;
-	fdf.zoom = 1;
-	fdf.x_offset = fdf.window_x / 12;
-	fdf.y_offset = fdf.window_y / 5;
-	fdf.y_factor = 0.65;
-	fdf.x_factor = 0.25;
-	fdf.z_factor = 1;
+    fdf_init(&fdf);
 	treatment(&fdf);
-	mlx_hook(fdf.windows, 2, 1L<<0, key_parser, &fdf);
-	mlx_do_key_autorepeaton(&fdf.mlx);
+    mlx_hook(fdf.windows, 2, 1L<<0, key_parser, &fdf);
+	KEYREPEAT
 	mlx_loop(fdf.mlx);
 	return (0);
 }
