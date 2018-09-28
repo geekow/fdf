@@ -72,6 +72,7 @@ void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
 	}
 }
 
+/*
 void	apply_plan(t_xy *result, t_dcoord *coord, t_fdf *fdf)
 {
 	result->x = (coord->y * fdf->zoom) * sin(fdf->y_factor * M_PI);
@@ -83,19 +84,76 @@ void	apply_plan(t_xy *result, t_dcoord *coord, t_fdf *fdf)
 	result->x += (fdf->x_offset * fdf->zoom);
 	result->y += (fdf->y_offset * fdf->zoom);
 }
+*/
+
+void    apply_plan(t_xy *result, t_dcoord *coord, t_fdf *fdf)
+{
+    result->x = coord->x;
+    result->y = coord->y;
+}
 
 //    T x[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
 
 t_dcoord	*apply_cam(t_coord *coord, t_fdf *fdf)
 {
-	t_dcoord	*result;
+	double x;
+	double y;
+	t_dcoord *result;
 
 	result = ft_memalloc(sizeof(t_coord));
-	result->x = coord->x * fdf->cam[0].x + coord->y * fdf->cam[1].x + coord->z * fdf->cam[2].x;
-	result->y = coord->x * fdf->cam[0].y + coord->y * fdf->cam[1].y + coord->z * fdf->cam[2].y;
-	result->z = coord->x * fdf->cam[0].z + coord->y * fdf->cam[1].z + coord->z * fdf->cam[2].z;
-	return (result);
+
+	result->x = coord->x;
+	result->y = coord->y;
+	result->z = coord->z;
+
+	result->z *= 1;
+
+	x = result->x;
+	result->x = cos(fdf->x_factor) * x + sin(fdf->x_factor) * result->z;
+	result->z = -sin(fdf->x_factor) * x + cos(fdf->x_factor) * result->z;
+
+	y = result->y;
+	result->y = cos(fdf->y_factor) * y - sin(fdf->y_factor) * result->z;
+	result->z = sin(fdf->y_factor) * y  + cos(fdf->y_factor) * result->z;
+
+	x = result->x;
+	y = result->y;
+	result->x = cos(fdf->z_factor) * x - sin(fdf->z_factor) * y;
+	result->y = sin(fdf->z_factor) * x + cos(fdf->z_factor) * y;
+
+	result->x *= fdf->zoom;
+	result->y *= fdf->zoom;
+	result->x += fdf->x_offset;
+	result->y += fdf->y_offset;
+
+	return result;
 }
+/*
+unsigned int    obtain_color_from_alt(int alt)
+{
+    int    red;
+    int    green;
+    int    blue;
+
+    if (alt < -50 || alt > 50)
+        alt = (alt < 0) ? -50 : 50;
+    alt += 50;
+    // alt is between 0 to 100
+    if (alt > 50)
+    {
+        red = (alt - 50) * 5;
+        green = 0x01;
+        blue = 0x01;
+    }
+    else
+    {
+        green = alt * 5;
+        red = 0x01;
+        blue = 0x01;
+    }
+    return red<<16 | green<<8 | blue;
+}
+*/
 
 void	trace_point(t_fdf *fdf, t_coord *coord)
 {
@@ -107,12 +165,12 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 	if (coord->right)
 	{
 		apply_plan(&tmp, apply_cam(coord->right, fdf), fdf);
-		trace_line(&result, &tmp, fdf, 0x000000FF);
+		trace_line(&result, &tmp, fdf, 0x0000FF);
 	}
 	if (coord->down)
 	{
 		apply_plan(&tmp, apply_cam(coord->down, fdf), fdf);
-		trace_line(&result, &tmp, fdf, 0x000000FF);
+		trace_line(&result, &tmp, fdf, 0x0000FF);
 	}
 }
 
@@ -126,7 +184,7 @@ void	print_axes(t_fdf *fdf)
 	center.x = 0;
 	center.y = 0;
 	center.z = 0;
-	apply_plan(&center_pos, &center, fdf);
+	apply_plan(&center_pos, apply_cam(&center, fdf), fdf);
 	axe.x = 0;
 	axe.y = 0;
 	axe.z = 1;
