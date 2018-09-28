@@ -72,61 +72,29 @@ void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
 	}
 }
 
-/*
-void	apply_plan(t_xy *result, t_dcoord *coord, t_fdf *fdf)
-{
-	result->x = (coord->y * fdf->zoom) * sin(fdf->y_factor * M_PI);
-	result->y = (coord->y * fdf->zoom) * cos(fdf->y_factor * M_PI);
-	result->x += (coord->x * fdf->zoom) * sin(fdf->x_factor * M_PI);
-	result->y += (coord->x * fdf->zoom) * cos(fdf->x_factor * M_PI);
-	result->x += (coord->z * fdf->zoom) * sin(fdf->z_factor * M_PI);
-	result->y += (coord->z * fdf->zoom) * cos(fdf->z_factor * M_PI);
-	result->x += (fdf->x_offset * fdf->zoom);
-	result->y += (fdf->y_offset * fdf->zoom);
-}
-*/
+/*See https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations*/
 
-void    apply_plan(t_xy *result, t_dcoord *coord, t_fdf *fdf)
-{
-    result->x = coord->x;
-    result->y = coord->y;
-}
-
-//    T x[4][4] = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
-
-t_dcoord	*apply_cam(t_coord *coord, t_fdf *fdf)
+void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
 {
 	double x;
 	double y;
-	t_dcoord *result;
+	t_dcoord tmp;
 
-	result = ft_memalloc(sizeof(t_coord));
-
-	result->x = coord->x;
-	result->y = coord->y;
-	result->z = coord->z;
-
-	result->z *= 1;
-
-	x = result->x;
-	result->x = cos(fdf->x_factor) * x + sin(fdf->x_factor) * result->z;
-	result->z = -sin(fdf->x_factor) * x + cos(fdf->x_factor) * result->z;
-
-	y = result->y;
-	result->y = cos(fdf->y_factor) * y - sin(fdf->y_factor) * result->z;
-	result->z = sin(fdf->y_factor) * y  + cos(fdf->y_factor) * result->z;
-
-	x = result->x;
-	y = result->y;
-	result->x = cos(fdf->z_factor) * x - sin(fdf->z_factor) * y;
-	result->y = sin(fdf->z_factor) * x + cos(fdf->z_factor) * y;
-
-	result->x *= fdf->zoom;
-	result->y *= fdf->zoom;
-	result->x += fdf->x_offset;
-	result->y += fdf->y_offset;
-
-	return result;
+	tmp.z = coord->z * fdf->z_zoom;
+	x = coord->x;
+	tmp.x = cos(fdf->x_factor) * x + sin(fdf->x_factor) * tmp.z;
+	tmp.z = -sin(fdf->x_factor) * x + cos(fdf->x_factor) * tmp.z;
+	y = coord->y;
+	tmp.y = cos(fdf->y_factor) * y - sin(fdf->y_factor) * tmp.z;
+	tmp.z = sin(fdf->y_factor) * y  + cos(fdf->y_factor) * tmp.z;
+	x = tmp.x;
+	y = tmp.y;
+	tmp.x = cos(fdf->z_factor) * x - sin(fdf->z_factor) * y;
+	tmp.y = sin(fdf->z_factor) * x + cos(fdf->z_factor) * y;
+	tmp.x = (tmp.x * fdf->zoom) + fdf->x_offset;
+	tmp.y = (tmp.y * fdf->zoom) + fdf->y_offset;
+	result->x = (int)tmp.x;
+	result->y = (int)tmp.y;
 }
 /*
 unsigned int    obtain_color_from_alt(int alt)
@@ -160,23 +128,23 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 	t_xy	result;
 	t_xy	tmp;
 
-	apply_plan(&result, apply_cam(coord, fdf), fdf);
+	apply_cam(&result, coord, fdf);
 	put_pixel(result.x, result.y, 0x00AFFFFF, fdf);
 	if (coord->right)
 	{
-		apply_plan(&tmp, apply_cam(coord->right, fdf), fdf);
+		apply_cam(&tmp, coord->right, fdf);
 		trace_line(&result, &tmp, fdf, 0x0000FF);
 	}
 	if (coord->down)
 	{
-		apply_plan(&tmp, apply_cam(coord->down, fdf), fdf);
+		apply_cam(&tmp, coord->down, fdf);
 		trace_line(&result, &tmp, fdf, 0x0000FF);
 	}
 }
 
 void	print_axes(t_fdf *fdf)
 {
-	t_dcoord	center;
+	t_coord	center;
 	t_coord		axe;
 	t_xy	center_pos;
 	t_xy	axe_pos;
@@ -184,19 +152,19 @@ void	print_axes(t_fdf *fdf)
 	center.x = 0;
 	center.y = 0;
 	center.z = 0;
-	apply_plan(&center_pos, apply_cam(&center, fdf), fdf);
+	apply_cam(&center_pos, &center, fdf);
 	axe.x = 0;
 	axe.y = 0;
 	axe.z = 1;
-	apply_plan(&axe_pos, apply_cam(&axe, fdf), fdf);
+	apply_cam(&axe_pos, &axe, fdf);
 	trace_line(&center_pos, &axe_pos, fdf, 0x00FF0101);
 	axe.x = 1;
 	axe.z = 0;
-	apply_plan(&axe_pos, apply_cam(&axe, fdf), fdf);
+	apply_cam(&axe_pos, &axe, fdf);
 	trace_line(&center_pos, &axe_pos, fdf, 0x0001FF01);
 	axe.x = 0;
 	axe.y = 1;
-	apply_plan(&axe_pos, apply_cam(&axe, fdf), fdf);
+	apply_cam(&axe_pos, &axe, fdf);
 	trace_line(&center_pos, &axe_pos, fdf, 0x00FF01FF);
 }
 
