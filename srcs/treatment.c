@@ -96,32 +96,6 @@ void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
 	result->x = (int)tmp.x;
 	result->y = (int)tmp.y;
 }
-/*
-unsigned int    obtain_color_from_alt(int alt)
-{
-    int    red;
-    int    green;
-    int    blue;
-
-    if (alt < -50 || alt > 50)
-        alt = (alt < 0) ? -50 : 50;
-    alt += 50;
-    // alt is between 0 to 100
-    if (alt > 50)
-    {
-        red = (alt - 50) * 5;
-        green = 0x01;
-        blue = 0x01;
-    }
-    else
-    {
-        green = alt * 5;
-        red = 0x01;
-        blue = 0x01;
-    }
-    return red<<16 | green<<8 | blue;
-}
-*/
 
 void	trace_point(t_fdf *fdf, t_coord *coord)
 {
@@ -172,7 +146,7 @@ void	treatment(t_fdf *fdf)
 {
 	t_list	*list;
 
-	ft_memset(fdf->imgdata, 0, fdf->img_size_line * fdf->window_y);
+	ft_memset(fdf->imgdata, 0, (size_t)fdf->img_size_line * fdf->window_y);
 	list = fdf->coords;
 	while (list)
 	{

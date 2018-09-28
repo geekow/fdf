@@ -21,21 +21,13 @@ void	write_error(char *str)
 
 void	fdf_init(t_fdf *fdf)
 {
-	fdf->zoom = 1;
-	fdf->x_offset = fdf->window_x / 12;
-	fdf->y_offset = fdf->window_y / 5;
-	fdf->y_factor = 0.65;
-	fdf->x_factor = 0.25;
-	fdf->z_factor = 1;
-	fdf->cam[0].x = 1;
-	fdf->cam[0].y = 0;
-	fdf->cam[0].z = 0;
-	fdf->cam[1].x = 0;
-	fdf->cam[1].y = 1;
-	fdf->cam[1].z = 0;
-	fdf->cam[2].x = 0;
-	fdf->cam[2].y = 0;
-	fdf->cam[2].z = 1;
+	fdf->zoom = 25;
+	fdf->x_offset = fdf->window_x / 4;
+	fdf->y_offset = fdf->window_y / 2;
+	fdf->y_factor = 3;
+	fdf->x_factor = -1;
+	fdf->z_factor = 1.4;
+	fdf->z_zoom = 1;
 }
 
 int		main(int ac, char **av)

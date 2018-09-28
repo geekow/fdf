@@ -66,9 +66,9 @@ typedef struct		s_fdf
 	double			y_factor;
 	double			x_factor;
 	double			z_factor;
+	double          z_zoom;
 	double			zoom;
 	t_list			*coords;
-	t_dcoord        cam[3];
 }					t_fdf;
 
 int					read_file(char **av, t_fdf *fdf);
