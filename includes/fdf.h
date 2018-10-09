@@ -31,6 +31,7 @@ typedef struct		s_coord
 	int				y;
 	int				x;
 	int				z;
+	int             color_degree;
 	t_coord			*right;
 	t_coord			*down;
 }					t_coord;

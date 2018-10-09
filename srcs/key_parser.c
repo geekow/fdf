@@ -37,17 +37,17 @@ void	modify_offset(int keycode, t_fdf *fdf)
 void	modify_axe(int keycode, t_fdf *fdf)
 {
 	if (keycode == NINE)
-		fdf->y_factor += 0.1;
+		fdf->y_factor += 0.05;
 	else if (keycode == THREE)
-		fdf->y_factor -= 0.1;
+		fdf->y_factor -= 0.05;
 	else if (keycode == EIGHT)
-		fdf->x_factor += 0.1;
+		fdf->x_factor += 0.05;
 	else if (keycode == TWO)
-		fdf->x_factor -= 0.1;
+		fdf->x_factor -= 0.05;
 	else if (keycode == SEVEN)
-		fdf->z_factor += 0.1;
+		fdf->z_factor += 0.05;
 	else if (keycode == ONE)
-		fdf->z_factor -= 0.1;
+		fdf->z_factor -= 0.05;
 	else if (keycode == FOUR)
 		fdf->z_factor = 1.4;
 	else if (keycode == FIVE)

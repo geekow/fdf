@@ -30,6 +30,7 @@ int	reg_point(int x, int y, char *z, t_list **list)
 			// return (-1);
 	// }
 	coord.z = ft_atoi(z);
+	coord.color_degree = 0;
 	coord.right = NULL;
 	coord.down = NULL;
 	if ((result = ft_lstnew(&coord, sizeof(t_coord))) == NULL)

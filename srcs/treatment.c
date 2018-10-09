@@ -79,7 +79,6 @@ void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
 	double x;
 	double y;
 	t_dcoord tmp;
-
 	tmp.z = coord->z * fdf->z_zoom;
 	x = coord->x;
 	tmp.x = cos(fdf->x_factor) * x + sin(fdf->x_factor) * tmp.z;
@@ -97,22 +96,51 @@ void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
 	result->y = (int)tmp.y;
 }
 
+int hsv_to_rgb(double h, double s, double v)
+{
+    double      p;
+    double      q;
+    double      t;
+
+    if (s == 0)
+        return ((int)(v*255))<<16 | ((int)(v*255))<<8 | (int)(v*255);
+    else
+    {
+        h = (h == 360) ? 0 : h / 60;
+        p = v * (1.0 - s);
+        q = v * (1.0 - (s * (h - (int)trunc(h))));
+        t = v * (1.0 - (s * (1.0 - (h - (int)trunc(h)))));
+        if ((int)trunc(h) == 0)
+            return ((int)(v*255))<<16 | ((int)(t*255))<<8 | (int)(p*255);
+        else if ((int)trunc(h) == 1)
+            return ((int)(q*255))<<16 | ((int)(v*255))<<8 | (int)(p*255);
+        else if ((int)trunc(h) == 2)
+            return ((int)(p*255))<<16 | ((int)(v*255))<<8 | (int)(t*255);
+        else if ((int)trunc(h) == 3)
+            return ((int)(p*255))<<16 | ((int)(q*255))<<8 | (int)(v*255);
+        else if ((int)trunc(h) == 4)
+            return ((int)(t*255))<<16 | ((int)(p*255))<<8 | (int)(v*255);
+        else
+            return ((int)(v*255))<<16 | ((int)(p*255))<<8 | (int)(q*255);
+    }
+}
+
 void	trace_point(t_fdf *fdf, t_coord *coord)
 {
 	t_xy	result;
 	t_xy	tmp;
 
 	apply_cam(&result, coord, fdf);
-	put_pixel(result.x, result.y, 0x00AFFFFF, fdf);
+	put_pixel(result.x, result.y, hsv_to_rgb(coord->color_degree, 1, 1) | 0x010101, fdf);
 	if (coord->right)
 	{
 		apply_cam(&tmp, coord->right, fdf);
-		trace_line(&result, &tmp, fdf, 0x0000FF);
+		trace_line(&result, &tmp, fdf, hsv_to_rgb(coord->color_degree, 1, 1) | 0x010101);
 	}
 	if (coord->down)
 	{
 		apply_cam(&tmp, coord->down, fdf);
-		trace_line(&result, &tmp, fdf, 0x0000FF);
+		trace_line(&result, &tmp, fdf, hsv_to_rgb(coord->color_degree, 1, 1) | 0x010101);
 	}
 }
 
