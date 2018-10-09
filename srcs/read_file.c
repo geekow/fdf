@@ -17,18 +17,20 @@ int	reg_point(int x, int y, char *z, t_list **list)
 {
 	t_list	*result;
 	t_coord	coord;
+	int		i;
 
 	coord.x = x;
 	coord.y = y;
-	// while (z[i])
-	// {
-		// if (i == 0 && z[i] == '-')
-			// i++;
-		// else if (ft_isdigit(z[i]))
-			// i++;
-		// else
-			// return (-1);
-	// }
+	i = 0;
+	while (z[i])
+	{
+		if (i == 0 && z[i] == '-')
+			i++;
+		else if (ft_isdigit(z[i]))
+			i++;
+		else
+			return (-1);
+	}
 	coord.z = ft_atoi(z);
 	coord.color_degree = 0;
 	coord.right = NULL;
@@ -67,7 +69,8 @@ int	read_file(char **av, t_fdf *fdf)
 	int		x;
 
 	x = 0;
-	fd = open(av[1], O_RDONLY);
+	if ((fd = open(av[1], O_RDONLY)) == -1)
+		return (-1);
 	fdf->coords = NULL;
 	while (get_next_line(fd, &line))
 	{

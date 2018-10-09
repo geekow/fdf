@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 18:07:17 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/10/09 18:39:36 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/09 20:16:07 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,80 +23,6 @@ void	put_pixel(int x, int y, int color, t_fdf *fdf)
 		ft_strncpy(fdf->imgdata + position, (char*)&color,
 				fdf->img_octet_per_pixel);
 	}
-}
-
-int		advance_segment(t_xy *start_point, t_xy *inc, t_xy *delta, int cumul)
-{
-	if (delta->x > delta->y)
-	{
-		start_point->x += inc->x;
-		cumul += delta->y;
-		if (cumul >= delta->x)
-			start_point->y += inc->y;
-		return (cumul - ((cumul >= delta->x) ? delta->x : 0));
-	}
-	else
-	{
-		start_point->y += inc->y;
-		cumul += delta->x;
-		if (cumul >= delta->y)
-			start_point->x += inc->x;
-		return (cumul - ((cumul >= delta->y) ? delta->y : 0));
-	}
-}
-
-/*
-** The trace_line function is an implementation of Bresenham algorithm.
-*/
-
-void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
-{
-	t_xy	start_point;
-	t_xy	delta;
-	t_xy	inc;
-	int		i;
-	int		cumul;
-
-	ft_memcpy(&start_point, one, sizeof(t_xy));
-	delta.x = abs(two->x - one->x);
-	delta.y = abs(two->y - one->y);
-	inc.x = (two->x - one->x > 0) ? 1 : -1;
-	inc.y = (two->y - one->y > 0) ? 1 : -1;
-	put_pixel(start_point.x, start_point.y, color, fdf);
-	i = 0;
-	cumul = (delta.x > delta.y) ? delta.x / 2 : delta.y / 2;
-	while (i++ < ((delta.x > delta.y) ? delta.x : delta.y))
-	{
-		cumul = advance_segment(&start_point, &inc, &delta, cumul);
-		put_pixel(start_point.x, start_point.y, color, fdf);
-	}
-}
-
-/*
-** See https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations
-*/
-
-void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
-{
-	double		x;
-	double		y;
-	t_dcoord	tmp;
-
-	tmp.z = coord->z * fdf->z_zoom;
-	x = coord->x;
-	tmp.x = cos(fdf->x_factor) * x + sin(fdf->x_factor) * tmp.z;
-	tmp.z = -sin(fdf->x_factor) * x + cos(fdf->x_factor) * tmp.z;
-	y = coord->y;
-	tmp.y = cos(fdf->y_factor) * y - sin(fdf->y_factor) * tmp.z;
-	tmp.z = sin(fdf->y_factor) * y + cos(fdf->y_factor) * tmp.z;
-	x = tmp.x;
-	y = tmp.y;
-	tmp.x = cos(fdf->z_factor) * x - sin(fdf->z_factor) * y;
-	tmp.y = sin(fdf->z_factor) * x + cos(fdf->z_factor) * y;
-	tmp.x = (tmp.x * fdf->zoom) + fdf->x_offset;
-	tmp.y = (tmp.y * fdf->zoom) + fdf->y_offset;
-	result->x = (int)tmp.x;
-	result->y = (int)tmp.y;
 }
 
 int		hsv_to_rgb(double h, double s, double v)
@@ -128,22 +54,104 @@ int		hsv_to_rgb(double h, double s, double v)
 	}
 }
 
+int		advance_segment(t_xy *start_point, t_xy *inc, t_xy *delta, int cumul)
+{
+	if (delta->x > delta->y)
+	{
+		start_point->x += inc->x;
+		cumul += delta->y;
+		if (cumul >= delta->x)
+			start_point->y += inc->y;
+		return (cumul - ((cumul >= delta->x) ? delta->x : 0));
+	}
+	else
+	{
+		start_point->y += inc->y;
+		cumul += delta->x;
+		if (cumul >= delta->y)
+			start_point->x += inc->x;
+		return (cumul - ((cumul >= delta->y) ? delta->y : 0));
+	}
+}
+
+/*
+** The trace_line function is an implementation of Bresenham algorithm.
+*/
+
+void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int colors_deg[2])
+{
+	t_xy	start_point;
+	t_xy	delta;
+	t_xy	inc;
+	int		counters[4];
+	double	percent;
+
+	ft_memcpy(&start_point, one, sizeof(t_xy));
+	delta.x = abs(two->x - one->x);
+	delta.y = abs(two->y - one->y);
+	inc.x = (two->x - one->x > 0) ? 1 : -1;
+	inc.y = (two->y - one->y > 0) ? 1 : -1;
+	counters[2] = hsv_to_rgb(colors_deg[0], 1, 1) | 0x010101;
+	put_pixel(start_point.x, start_point.y, counters[2], fdf);
+	counters[0] = 0;
+	counters[1] = (delta.x > delta.y) ? delta.x / 2 : delta.y / 2;
+	while (counters[0]++ < ((delta.x > delta.y) ? delta.x : delta.y))
+	{
+		counters[2] = colors_deg[1] - colors_deg[0];
+		percent = counters[0] / (float)(delta.x > delta.y ? delta.x : delta.y);
+		counters[2] = hsv_to_rgb(colors_deg[0] + (counters[2] * percent), 1, 1);
+		counters[2] = counters[2] | 0x010101;
+		counters[1] = advance_segment(&start_point, &inc, &delta, counters[1]);
+		put_pixel(start_point.x, start_point.y, counters[2], fdf);
+	}
+}
+
+/*
+** See https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations
+*/
+
+void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
+{
+	double		x;
+	double		y;
+	t_dcoord	tmp;
+
+	tmp.z = coord->z * fdf->z_zoom;
+	x = coord->x;
+	tmp.x = cos(fdf->x_factor) * x + sin(fdf->x_factor) * tmp.z;
+	tmp.z = -sin(fdf->x_factor) * x + cos(fdf->x_factor) * tmp.z;
+	y = coord->y;
+	tmp.y = cos(fdf->y_factor) * y - sin(fdf->y_factor) * tmp.z;
+	tmp.z = sin(fdf->y_factor) * y + cos(fdf->y_factor) * tmp.z;
+	x = tmp.x;
+	y = tmp.y;
+	tmp.x = cos(fdf->z_factor) * x - sin(fdf->z_factor) * y;
+	tmp.y = sin(fdf->z_factor) * x + cos(fdf->z_factor) * y;
+	tmp.x = (tmp.x * fdf->zoom) + fdf->x_offset;
+	tmp.y = (tmp.y * fdf->zoom) + fdf->y_offset;
+	result->x = (int)tmp.x;
+	result->y = (int)tmp.y;
+}
+
 void	trace_point(t_fdf *fdf, t_coord *coord)
 {
 	t_xy	result;
 	t_xy	tmp;
+	int		colors_deg[2];
 
 	apply_cam(&result, coord, fdf);
-	put_pixel(result.x, result.y, hsv_to_rgb(coord->color_degree, 1, 1) | 0x010101, fdf);
+	colors_deg[0] = coord->color_degree;
 	if (coord->right)
 	{
+		colors_deg[1] = coord->right->color_degree;
 		apply_cam(&tmp, coord->right, fdf);
-		trace_line(&result, &tmp, fdf, hsv_to_rgb(coord->color_degree, 1, 1) | 0x010101);
+		trace_line(&result, &tmp, fdf, colors_deg);
 	}
 	if (coord->down)
 	{
+		colors_deg[1] = coord->down->color_degree;
 		apply_cam(&tmp, coord->down, fdf);
-		trace_line(&result, &tmp, fdf, hsv_to_rgb(coord->color_degree, 1, 1) | 0x010101);
+		trace_line(&result, &tmp, fdf, colors_deg);
 	}
 }
 
@@ -153,7 +161,10 @@ void	print_axes(t_fdf *fdf)
 	t_coord	axe;
 	t_xy	center_pos;
 	t_xy	axe_pos;
+	int		colors[2];
 
+	colors[0] = 180;
+	colors[1] = colors[0];
 	center.x = 0;
 	center.y = 0;
 	center.z = 0;
@@ -162,15 +173,15 @@ void	print_axes(t_fdf *fdf)
 	axe.y = 0;
 	axe.z = 1;
 	apply_cam(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, 0x00FF0101);
+	trace_line(&center_pos, &axe_pos, fdf, colors);
 	axe.x = 1;
 	axe.z = 0;
 	apply_cam(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, 0x0001FF01);
+	trace_line(&center_pos, &axe_pos, fdf, colors);
 	axe.x = 0;
 	axe.y = 1;
 	apply_cam(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, 0x00FF01FF);
+	trace_line(&center_pos, &axe_pos, fdf, colors);
 }
 
 void	treatment(t_fdf *fdf)

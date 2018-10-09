@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/10/09 18:16:46 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/09 20:56:03 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ void	fdf_init(t_fdf *fdf)
 	fdf->z_zoom = 1;
 }
 
+int		refresh_img(t_fdf *fdf)
+{
+	treatment(fdf);
+	return (0);
+}
+
 int		main(int ac, char **av)
 {
 	t_fdf	fdf;
@@ -48,6 +54,7 @@ int		main(int ac, char **av)
 	fdf.img_octet_per_pixel = fdf.img_bits_per_pixel / 8;
 	fdf_init(&fdf);
 	treatment(&fdf);
+	mlx_expose_hook(fdf.windows, refresh_img, &fdf);
 	mlx_hook(fdf.windows, 2, 1L << 0, key_parser, &fdf);
 	KEYREPEAT;
 	mlx_loop(fdf.mlx);
