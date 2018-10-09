@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:02:35 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/10/09 18:28:51 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/10 00:04:11 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct		s_coord
 	int				y;
 	int				x;
 	int				z;
-	int 			fixed_color;
+	int				fixed_color;
 	int				color_degree;
 	struct s_coord	*right;
 	struct s_coord	*down;
@@ -49,7 +49,6 @@ typedef struct		s_xy
 
 typedef struct		s_fdf
 {
-	char 			fixed_colors;
 	int				window_x;
 	int				window_y;
 	void			*mlx;

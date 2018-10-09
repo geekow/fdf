@@ -6,12 +6,41 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:32:04 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/24 12:41:25 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/09 23:24:57 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <fcntl.h>
+
+int	get_color(char *str)
+{
+	int len;
+	int result;
+	int i;
+	int tmp;
+
+	if (!str)
+		return (0);
+	i = 0;
+	result = 0;
+	str = &str[3];
+	len = (int)ft_strlen(str);
+	tmp = 0;
+	while (str[i])
+	{
+		len--;
+		if (str[i] >= '0' && str[i] <= '9')
+			tmp = str[i] - '0';
+		else if (str[i] >= 'a' && str[i] <= 'f')
+			tmp = str[i] - 'a';
+		else if (str[i] >= 'A' && str[i] <= 'F')
+			tmp = str[i] - 'A';
+		result += tmp * ft_power(16, len);
+		i++;
+	}
+	return (result | 0x010101);
+}
 
 int	reg_point(int x, int y, char *z, t_list **list)
 {
@@ -21,17 +50,18 @@ int	reg_point(int x, int y, char *z, t_list **list)
 
 	coord.x = x;
 	coord.y = y;
-	i = 0;
+	i = (z[0] && z[0] == '-') ? 1 : 0;
 	while (z[i])
 	{
-		if (i == 0 && z[i] == '-')
+		if (ft_isdigit(z[i]))
 			i++;
-		else if (ft_isdigit(z[i]))
+		else if (ft_strstr(z, ",0x") && ft_strchr(",xABCDEFabcdef", z[i]))
 			i++;
 		else
 			return (-1);
 	}
 	coord.z = ft_atoi(z);
+	coord.fixed_color = get_color(ft_strstr(z, ",0x"));
 	coord.color_degree = 0;
 	coord.right = NULL;
 	coord.down = NULL;

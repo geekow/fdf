@@ -168,7 +168,7 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 	{
 		colors_deg[1] = coord->right->color_degree;
 		apply_cam(&tmp, coord->right, fdf);
-		if (fdf->fixed_colors)
+		if (coord->fixed_color)
 			trace_line_fixed_color(&result, &tmp, fdf, coord->fixed_color);
 		else
 			trace_line(&result, &tmp, fdf, colors_deg);
@@ -177,7 +177,7 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 	{
 		colors_deg[1] = coord->down->color_degree;
 		apply_cam(&tmp, coord->down, fdf);
-		if (fdf->fixed_colors)
+		if (coord->fixed_color)
 			trace_line_fixed_color(&result, &tmp, fdf, coord->fixed_color);
 		else
 			trace_line(&result, &tmp, fdf, colors_deg);

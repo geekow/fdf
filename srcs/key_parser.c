@@ -69,7 +69,7 @@ int		key_parser(int keycode, t_fdf *fdf)
 	else if (keycode == A)
 		fdf->show_axes = (char)((fdf->show_axes) ? 0 : 1);
 	else if (keycode == E || keycode == R)
-		fdf->z_zoom += (keycode == E ? 0.1 : -0.1);
+		fdf->z_zoom += (keycode == E ? 0.01 : -0.01);
 	else
 		ft_printf("Unrecognized key pressed. Keycode: %i\n", keycode);
 	treatment(fdf);
