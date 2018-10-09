@@ -56,10 +56,25 @@ void	modify_axe(int keycode, t_fdf *fdf)
 		fdf->y_factor = 3;
 }
 
+void	free_all(t_fdf *fdf)
+{
+	t_list	*lst;
+
+	while (fdf->coords)
+	{
+		lst = fdf->coords;
+		free(lst->content);
+		fdf->coords = lst->next;
+		free(lst);
+	}
+	free(fdf);
+	exit(0);
+}
+
 int		key_parser(int keycode, t_fdf *fdf)
 {
 	if (keycode == ESCAPE)
-		exit(0);
+		free_all(fdf);
 	else if (keycode == PLUS || keycode == MINUS)
 		modify_zoom(fdf, (char)(keycode == PLUS ? 1 : 0));
 	else if (ARROW_COND(keycode))
