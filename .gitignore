@@ -1,6 +1,7 @@
 *.o
 fdf
 *.a
+*.swp
 ./libmlx_linux/libmlx_x86_64.a
 ./libmlx_linux/libmlx.a
 vgcore.*

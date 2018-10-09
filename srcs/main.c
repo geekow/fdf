@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 15:51:19 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/08/10 16:26:38 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/09 18:16:46 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ int		main(int ac, char **av)
 	fdf.imgdata = mlx_get_data_addr(fdf.image, &fdf.img_bits_per_pixel,
 										&fdf.img_size_line, &fdf.img_endian);
 	fdf.img_octet_per_pixel = fdf.img_bits_per_pixel / 8;
-    fdf_init(&fdf);
+	fdf_init(&fdf);
 	treatment(&fdf);
-    mlx_hook(fdf.windows, 2, 1L<<0, key_parser, &fdf);
-	KEYREPEAT
+	mlx_hook(fdf.windows, 2, 1L << 0, key_parser, &fdf);
+	KEYREPEAT;
 	mlx_loop(fdf.mlx);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/19 17:03:18 by jjacobi           #+#    #+#             */
-/*   Updated: 2017/10/24 16:08:17 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/09 18:43:03 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	color_degree(t_list *liststart)
 {
 	t_list	*list;
 	t_coord	*coord;
-	int 	min;
-	int 	max;
-	float 	tmp;
+	int		min;
+	int		max;
+	float	tmp;
 
 	list = liststart;
 	min = INT32_MAX;

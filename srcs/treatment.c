@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 18:07:17 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/08/10 16:46:07 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/09 18:39:36 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	put_pixel(int x, int y, int color, t_fdf *fdf)
 	{
 		position = (fdf->img_size_line * y) + (x * fdf->img_octet_per_pixel);
 		ft_strncpy(fdf->imgdata + position, (char*)&color,
-													fdf->img_octet_per_pixel);
+				fdf->img_octet_per_pixel);
 	}
 }
 
@@ -72,20 +72,23 @@ void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int color)
 	}
 }
 
-/*See https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations*/
+/*
+** See https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations
+*/
 
 void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
 {
-	double x;
-	double y;
-	t_dcoord tmp;
+	double		x;
+	double		y;
+	t_dcoord	tmp;
+
 	tmp.z = coord->z * fdf->z_zoom;
 	x = coord->x;
 	tmp.x = cos(fdf->x_factor) * x + sin(fdf->x_factor) * tmp.z;
 	tmp.z = -sin(fdf->x_factor) * x + cos(fdf->x_factor) * tmp.z;
 	y = coord->y;
 	tmp.y = cos(fdf->y_factor) * y - sin(fdf->y_factor) * tmp.z;
-	tmp.z = sin(fdf->y_factor) * y  + cos(fdf->y_factor) * tmp.z;
+	tmp.z = sin(fdf->y_factor) * y + cos(fdf->y_factor) * tmp.z;
 	x = tmp.x;
 	y = tmp.y;
 	tmp.x = cos(fdf->z_factor) * x - sin(fdf->z_factor) * y;
@@ -96,33 +99,33 @@ void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
 	result->y = (int)tmp.y;
 }
 
-int hsv_to_rgb(double h, double s, double v)
+int		hsv_to_rgb(double h, double s, double v)
 {
-    double      p;
-    double      q;
-    double      t;
+	double	p;
+	double	q;
+	double	t;
 
-    if (s == 0)
-        return ((int)(v*255))<<16 | ((int)(v*255))<<8 | (int)(v*255);
-    else
-    {
-        h = (h == 360) ? 0 : h / 60;
-        p = v * (1.0 - s);
-        q = v * (1.0 - (s * (h - (int)trunc(h))));
-        t = v * (1.0 - (s * (1.0 - (h - (int)trunc(h)))));
-        if ((int)trunc(h) == 0)
-            return ((int)(v*255))<<16 | ((int)(t*255))<<8 | (int)(p*255);
-        else if ((int)trunc(h) == 1)
-            return ((int)(q*255))<<16 | ((int)(v*255))<<8 | (int)(p*255);
-        else if ((int)trunc(h) == 2)
-            return ((int)(p*255))<<16 | ((int)(v*255))<<8 | (int)(t*255);
-        else if ((int)trunc(h) == 3)
-            return ((int)(p*255))<<16 | ((int)(q*255))<<8 | (int)(v*255);
-        else if ((int)trunc(h) == 4)
-            return ((int)(t*255))<<16 | ((int)(p*255))<<8 | (int)(v*255);
-        else
-            return ((int)(v*255))<<16 | ((int)(p*255))<<8 | (int)(q*255);
-    }
+	if (s == 0)
+		return ((int)(v * 255)) << 16 | ((int)(v * 255)) << 8 | (int)(v * 255);
+	else
+	{
+		h = (h == 360) ? 0 : h / 60;
+		p = v * (1.0 - s);
+		q = v * (1.0 - (s * (h - (int)trunc(h))));
+		t = v * (1.0 - (s * (1.0 - (h - (int)trunc(h)))));
+		if ((int)trunc(h) == 0)
+			return (int)(v * 255) << 16 | (int)(t * 255) << 8 | (int)(p * 255);
+		else if ((int)trunc(h) == 1)
+			return (int)(q * 255) << 16 | (int)(v * 255) << 8 | (int)(p * 255);
+		else if ((int)trunc(h) == 2)
+			return (int)(p * 255) << 16 | (int)(v * 255) << 8 | (int)(t * 255);
+		else if ((int)trunc(h) == 3)
+			return (int)(p * 255) << 16 | (int)(q * 255) << 8 | (int)(v * 255);
+		else if ((int)trunc(h) == 4)
+			return (int)(t * 255) << 16 | (int)(p * 255) << 8 | (int)(v * 255);
+		else
+			return (int)(v * 255) << 16 | (int)(p * 255) << 8 | (int)(q * 255);
+	}
 }
 
 void	trace_point(t_fdf *fdf, t_coord *coord)
@@ -147,7 +150,7 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 void	print_axes(t_fdf *fdf)
 {
 	t_coord	center;
-	t_coord		axe;
+	t_coord	axe;
 	t_xy	center_pos;
 	t_xy	axe_pos;
 

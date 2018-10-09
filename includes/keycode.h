@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   keycode.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jjacobi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/09 18:19:30 by jjacobi           #+#    #+#             */
+/*   Updated: 2018/10/09 18:19:34 by jjacobi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef KEYCODE_H
 # define KEYCODE_H
 
@@ -22,6 +34,12 @@
 #  define EIGHT		91
 #  define NINE		92
 #  define NBR_COND(x)	(x >= 82 && x <= 92 && x != 90)
+#  define E         14
+#  define R         15
+#  define T         17
+#  define Y         16
+#  define U         32
+#  define I         34
 # else
 #  define ESCAPE	65307
 #  define PLUS		65451
