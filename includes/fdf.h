@@ -28,6 +28,7 @@ typedef struct		s_coord
 	int				y;
 	int				x;
 	int				z;
+	int 			fixed_color;
 	int				color_degree;
 	struct s_coord	*right;
 	struct s_coord	*down;
@@ -48,6 +49,7 @@ typedef struct		s_xy
 
 typedef struct		s_fdf
 {
+	char 			fixed_colors;
 	int				window_x;
 	int				window_y;
 	void			*mlx;

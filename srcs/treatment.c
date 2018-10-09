@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 18:07:17 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/10/09 20:16:07 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/09 21:40:36 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,29 @@ void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int colors_deg[2])
 	}
 }
 
+void	trace_line_fixed_color(t_xy *one, t_xy *two, t_fdf *fdf, int color)
+{
+	t_xy	start_point;
+	t_xy	delta;
+	t_xy	inc;
+	int		i;
+	int		cumul;
+
+	ft_memcpy(&start_point, one, sizeof(t_xy));
+	delta.x = abs(two->x - one->x);
+	delta.y = abs(two->y - one->y);
+	inc.x = (two->x - one->x > 0) ? 1 : -1;
+	inc.y = (two->y - one->y > 0) ? 1 : -1;
+	put_pixel(start_point.x, start_point.y, color, fdf);
+	i = 0;
+	cumul = (delta.x > delta.y) ? delta.x / 2 : delta.y / 2;
+	while (i++ < ((delta.x > delta.y) ? delta.x : delta.y))
+	{
+		cumul = advance_segment(&start_point, &inc, &delta, cumul);
+		put_pixel(start_point.x, start_point.y, color, fdf);
+	}
+}
+
 /*
 ** See https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations
 */
@@ -145,13 +168,19 @@ void	trace_point(t_fdf *fdf, t_coord *coord)
 	{
 		colors_deg[1] = coord->right->color_degree;
 		apply_cam(&tmp, coord->right, fdf);
-		trace_line(&result, &tmp, fdf, colors_deg);
+		if (fdf->fixed_colors)
+			trace_line_fixed_color(&result, &tmp, fdf, coord->fixed_color);
+		else
+			trace_line(&result, &tmp, fdf, colors_deg);
 	}
 	if (coord->down)
 	{
 		colors_deg[1] = coord->down->color_degree;
 		apply_cam(&tmp, coord->down, fdf);
-		trace_line(&result, &tmp, fdf, colors_deg);
+		if (fdf->fixed_colors)
+			trace_line_fixed_color(&result, &tmp, fdf, coord->fixed_color);
+		else
+			trace_line(&result, &tmp, fdf, colors_deg);
 	}
 }
 
@@ -161,10 +190,7 @@ void	print_axes(t_fdf *fdf)
 	t_coord	axe;
 	t_xy	center_pos;
 	t_xy	axe_pos;
-	int		colors[2];
 
-	colors[0] = 180;
-	colors[1] = colors[0];
 	center.x = 0;
 	center.y = 0;
 	center.z = 0;
@@ -173,15 +199,15 @@ void	print_axes(t_fdf *fdf)
 	axe.y = 0;
 	axe.z = 1;
 	apply_cam(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, colors);
+	trace_line_fixed_color(&center_pos, &axe_pos, fdf, 0xFF0101);
 	axe.x = 1;
 	axe.z = 0;
 	apply_cam(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, colors);
+	trace_line_fixed_color(&center_pos, &axe_pos, fdf, 0x01FF01);
 	axe.x = 0;
 	axe.y = 1;
 	apply_cam(&axe_pos, &axe, fdf);
-	trace_line(&center_pos, &axe_pos, fdf, colors);
+	trace_line_fixed_color(&center_pos, &axe_pos, fdf, 0xFF01FF);
 }
 
 void	treatment(t_fdf *fdf)
