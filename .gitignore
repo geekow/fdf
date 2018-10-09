@@ -5,5 +5,4 @@ fdf
 ./libmlx_linux/libmlx.a
 vgcore.*
 .idea/
-CMakeLists.txt
 cmake-build-debug/
