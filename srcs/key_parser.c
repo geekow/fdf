@@ -67,7 +67,10 @@ void	free_all(t_fdf *fdf)
 		fdf->coords = lst->next;
 		free(lst);
 	}
-	free(fdf);
+	free(fdf->mlx);
+	free(fdf->windows);
+	free(fdf->image);
+	free(fdf->imgdata);
 	exit(0);
 }
 
