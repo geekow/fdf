@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:02:35 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/10/10 00:04:11 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/10 00:21:33 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,9 @@ void				write_error(char *str);
 void				build_connections(t_list *coords);
 void				treatment(t_fdf *fdf);
 int					key_parser(int keycode, t_fdf *fdf);
+void				trace_line(t_xy *one, t_xy *two, t_fdf *fdf,
+								int colors_deg[2]);
+void				trace_line_fixed_color(t_xy *one, t_xy *two, t_fdf *fdf,
+											int color);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/06 15:47:34 by jjacobi           #+#    #+#              #
-#    Updated: 2017/10/19 19:32:23 by jjacobi          ###   ########.fr        #
+#    Updated: 2018/10/10 00:24:00 by jjacobi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME		= fdf
 CC			= clang
 CFLAGS		= -Wall -Wextra -Werror -g
 
-SRC_FILES   = main.c read_file.c build_connections.c treatment.c key_parser.c
+SRC_FILES   = main.c read_file.c build_connections.c treatment.c key_parser.c \
+			  trace_line.c
 OBJ			= $(SRC_FILES:.c=.o)
 
 H_DIRS		= -I ./includes -I ./libft/includes
@@ -27,7 +28,8 @@ ifeq ($(shell uname),Darwin)
 	ECHO	= echo
 else
 	MLX_PATH	= ./libmlx_linux
-	CC_FLAGS	= -I ./libmlx_linux -I /usr/X11/include -g -L /usr/X11/lib -lX11 -lmlx -lXext -lm
+	CC_FLAGS	= -I ./libmlx_linux -I /usr/X11/include -g -L /usr/X11/lib \
+				  -lX11 -lmlx -lXext -lm
 	ECHO	= echo -e
 endif
 
