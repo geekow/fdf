@@ -18,7 +18,7 @@ add_executable(fdf
         srcs/treatment.c
         srcs/trace_line.c)
 
-if (UNIX AND LINUX)
+if (UNIX AND NOT APPLE)
     include_directories(libmlx_linux)
     include_directories(/usr/X11/include)
 
@@ -30,7 +30,7 @@ if (UNIX AND LINUX)
             m
             X11
             Xext)
-endif(UNIX AND LINUX)
+endif(UNIX AND NOT APPLE)
 if (UNIX AND APPLE)
     include_directories(libmlx_macos)
     link_directories(libmlx_macos)
