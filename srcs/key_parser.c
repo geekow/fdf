@@ -70,7 +70,6 @@ void	free_all(t_fdf *fdf)
 	free(fdf->mlx);
 	free(fdf->windows);
 	free(fdf->image);
-	free(fdf->imgdata);
 	exit(0);
 }
 
