@@ -40,29 +40,31 @@ void	apply_cam(t_xy *result, t_coord *coord, t_fdf *fdf)
 	result->y = (int)tmp.y;
 }
 
-void	trace_point(t_fdf *fdf, t_coord *coord)
+void	trace_point(t_fdf *fdf, t_coord *c)
 {
 	t_xy	result;
 	t_xy	tmp;
 	int		colors_deg[2];
 
-	apply_cam(&result, coord, fdf);
-	colors_deg[0] = coord->color_degree;
-	if (coord->right)
+	apply_cam(&result, c, fdf);
+	colors_deg[0] = c->color_degree;
+	if (c->right)
 	{
-		colors_deg[1] = coord->right->color_degree;
-		apply_cam(&tmp, coord->right, fdf);
-		if (coord->fixed_color)
-			trace_line_fixed_color(&result, &tmp, fdf, coord->fixed_color);
+		colors_deg[1] = c->right->color_degree;
+		apply_cam(&tmp, c->right, fdf);
+		if (c->fixed_color || c->color_degree == c->right->color_degree)
+			trace_line_fixed_color(&result, &tmp, fdf, (c->fixed_color ?
+			c->fixed_color : HSV_DEGREE(c->color_degree)));
 		else
 			trace_line(&result, &tmp, fdf, colors_deg);
 	}
-	if (coord->down)
+	if (c->down)
 	{
-		colors_deg[1] = coord->down->color_degree;
-		apply_cam(&tmp, coord->down, fdf);
-		if (coord->fixed_color)
-			trace_line_fixed_color(&result, &tmp, fdf, coord->fixed_color);
+		colors_deg[1] = c->down->color_degree;
+		apply_cam(&tmp, c->down, fdf);
+		if (c->fixed_color || c->color_degree == c->down->color_degree)
+			trace_line_fixed_color(&result, &tmp, fdf, (c->fixed_color ?
+			c->fixed_color : HSV_DEGREE(c->color_degree)));
 		else
 			trace_line(&result, &tmp, fdf, colors_deg);
 	}

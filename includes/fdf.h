@@ -22,6 +22,7 @@
 # else
 #  define KEYREPEAT {}
 # endif
+# define HSV_DEGREE(X)	hsv_to_rgb(X, 1, 1) | 0x010101
 
 typedef struct		s_coord
 {
@@ -79,5 +80,6 @@ void				trace_line(t_xy *one, t_xy *two, t_fdf *fdf,
 								int colors_deg[2]);
 void				trace_line_fixed_color(t_xy *one, t_xy *two, t_fdf *fdf,
 											int color);
+int                 hsv_to_rgb(double h, double s, double v);
 
 #endif

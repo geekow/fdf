@@ -58,7 +58,7 @@ void	color_degree(t_list *liststart)
 	{
 		coord = liststart->content;
 		tmp = (float)(coord->z - min) / (float)(max - min);
-		coord->color_degree = (int)(tmp * 330);
+		coord->color_degree = (int)(tmp * 310);
 		liststart = liststart->next;
 	}
 }

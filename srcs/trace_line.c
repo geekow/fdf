@@ -78,30 +78,32 @@ int		advance_segment(t_xy *start_point, t_xy *inc, t_xy *delta, int cumul)
 ** The trace_line function is an implementation of Bresenham algorithm.
 */
 
-void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int colors_deg[2])
+void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int cdeg[2])
 {
 	t_xy	start_point;
-	t_xy	delta;
+	t_xy	d;
 	t_xy	inc;
 	int		counters[4];
 	double	percent;
 
 	ft_memcpy(&start_point, one, sizeof(t_xy));
-	delta.x = abs(two->x - one->x);
-	delta.y = abs(two->y - one->y);
+	d.x = abs(two->x - one->x);
+	d.y = abs(two->y - one->y);
 	inc.x = (two->x - one->x > 0) ? 1 : -1;
 	inc.y = (two->y - one->y > 0) ? 1 : -1;
-	counters[2] = hsv_to_rgb(colors_deg[0], 1, 1) | 0x010101;
 	put_pixel(start_point.x, start_point.y, counters[2], fdf);
 	counters[0] = 0;
-	counters[1] = (delta.x > delta.y) ? delta.x / 2 : delta.y / 2;
-	while (counters[0]++ < ((delta.x > delta.y) ? delta.x : delta.y))
+	counters[1] = (d.x > d.y) ? d.x / 2 : d.y / 2;
+	counters[2] = HSV_DEGREE(cdeg[0]);
+	percent = 0;
+	while (counters[0]++ < ((d.x > d.y) ? d.x : d.y))
 	{
-		counters[2] = colors_deg[1] - colors_deg[0];
-		percent = counters[0] / (float)(delta.x > delta.y ? delta.x : delta.y);
-		counters[2] = hsv_to_rgb(colors_deg[0] + (counters[2] * percent), 1, 1);
-		counters[2] = counters[2] | 0x010101;
-		counters[1] = advance_segment(&start_point, &inc, &delta, counters[1]);
+		if ((counters[0] / (float)(d.x > d.y ? d.x : d.y)) - percent > 0.01)
+		{
+			percent = counters[0] / (float)(d.x > d.y ? d.x : d.y);
+			counters[2] = HSV_DEGREE(cdeg[0] + ((cdeg[1] - cdeg[0]) * percent));
+		}
+		counters[1] = advance_segment(&start_point, &inc, &d, counters[1]);
 		put_pixel(start_point.x, start_point.y, counters[2], fdf);
 	}
 }
