@@ -6,7 +6,7 @@
 /*   By: jjacobi <jjacobi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 17:02:35 by jjacobi           #+#    #+#             */
-/*   Updated: 2018/10/10 00:21:33 by jjacobi          ###   ########.fr       */
+/*   Updated: 2018/10/16 17:04:11 by jjacobi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,6 @@ void				trace_line(t_xy *one, t_xy *two, t_fdf *fdf,
 								int colors_deg[2]);
 void				trace_line_fixed_color(t_xy *one, t_xy *two, t_fdf *fdf,
 											int color);
-int                 hsv_to_rgb(double h, double s, double v);
+int					hsv_to_rgb(double h, double s, double v);
 
 #endif
