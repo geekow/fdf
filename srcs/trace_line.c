@@ -80,31 +80,30 @@ int		advance_segment(t_xy *start_point, t_xy *inc, t_xy *delta, int cumul)
 
 void	trace_line(t_xy *one, t_xy *two, t_fdf *fdf, int cdeg[2])
 {
-	t_xy	start_point;
-	t_xy	d;
-	t_xy	inc;
+	t_xy	p[3];
 	int		counters[4];
 	double	percent;
 
-	ft_memcpy(&start_point, one, sizeof(t_xy));
-	d.x = abs(two->x - one->x);
-	d.y = abs(two->y - one->y);
-	inc.x = (two->x - one->x > 0) ? 1 : -1;
-	inc.y = (two->y - one->y > 0) ? 1 : -1;
-	put_pixel(start_point.x, start_point.y, counters[2], fdf);
+	ft_memcpy(&p[2], one, sizeof(t_xy));
+	p[0].x = abs(two->x - one->x);
+	p[0].y = abs(two->y - one->y);
+	p[1].x = (two->x - one->x > 0) ? 1 : -1;
+	p[1].y = (two->y - one->y > 0) ? 1 : -1;
+	put_pixel(p[2].x, p[2].y, counters[2], fdf);
 	counters[0] = 0;
-	counters[1] = (d.x > d.y) ? d.x / 2 : d.y / 2;
+	counters[1] = (p[0].x > p[0].y) ? p[0].x / 2 : p[0].y / 2;
 	counters[2] = HSV_DEGREE(cdeg[0]);
 	percent = 0;
-	while (counters[0]++ < ((d.x > d.y) ? d.x : d.y))
+	while (counters[0]++ < ((p[0].x > p[0].y) ? p[0].x : p[0].y))
 	{
-		if ((counters[0] / (float)(d.x > d.y ? d.x : d.y)) - percent > 0.01)
+		if ((counters[0] / (float)(p[0].x > p[0].y ? p[0].x : p[0].y))
+			- percent > 0.01)
 		{
-			percent = counters[0] / (float)(d.x > d.y ? d.x : d.y);
+			percent = counters[0] / (float)(p[0].x > p[0].y ? p[0].x : p[0].y);
 			counters[2] = HSV_DEGREE(cdeg[0] + ((cdeg[1] - cdeg[0]) * percent));
 		}
-		counters[1] = advance_segment(&start_point, &inc, &d, counters[1]);
-		put_pixel(start_point.x, start_point.y, counters[2], fdf);
+		counters[1] = advance_segment(&p[2], &p[1], &p[0], counters[1]);
+		put_pixel(p[2].x, p[2].y, counters[2], fdf);
 	}
 }
 
