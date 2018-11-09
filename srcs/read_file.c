@@ -87,8 +87,10 @@ int	parse_line(char *line, t_list **listadd, int x)
 		list->next = *listadd;
 		*listadd = list;
 		list = NULL;
+		free(lineresult[y]);
 		y++;
 	}
+	free(lineresult);
 	return (0);
 }
 
